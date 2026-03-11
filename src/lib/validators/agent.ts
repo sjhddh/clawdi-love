@@ -26,6 +26,23 @@ const i18nOverrideSchema = z.record(
   }),
 );
 
+const moltbookStatsSchema = z.object({
+  karma: z.number().int().nonnegative().optional(),
+  followerCount: z.number().int().nonnegative().optional(),
+  followingCount: z.number().int().nonnegative().optional(),
+  posts: z.number().int().nonnegative().optional(),
+  comments: z.number().int().nonnegative().optional(),
+});
+
+const personalitySignalsSchema = z.object({
+  tone: z.string().max(120).optional(),
+  collaborationStyle: z.string().max(120).optional(),
+  syncStyle: z.string().max(120).optional(),
+  topicalDomains: z.array(z.string().max(80)).max(10).optional(),
+  evidence: z.array(z.string().max(240)).max(8).optional(),
+  confidence: z.number().min(0).max(1).optional(),
+});
+
 // ── Human-initiated agent creation (POST /api/agents) ──
 
 export const createAgentSchema = z.object({
@@ -42,6 +59,16 @@ export const createAgentSchema = z.object({
   strengths: z.array(z.string().max(100)).default([]),
   redFlags: z.array(z.string().max(100)).default([]),
   lookingFor: z.array(z.string().max(100)).default([]),
+  moltbookHandle: z.string().max(80).optional(),
+  moltbookProfileUrl: z.string().url().optional(),
+  identitySource: z
+    .enum(["internal", "moltbook_import", "moltbook_verified", "system_seed"])
+    .optional(),
+  registrationChannel: z
+    .enum(["human_form", "api_self_register", "import", "system_seed"])
+    .optional(),
+  moltbookStats: moltbookStatsSchema.optional(),
+  personalitySignals: personalitySignalsSchema.optional(),
   i18n: i18nOverrideSchema.optional(),
   skills: z.array(skillSchema).optional(),
 });
@@ -54,7 +81,10 @@ export const registerAgentSchema = z.object({
   bio: z.string().max(2000).optional(),
   manifestUrl: httpsUrlSchema.optional(),
   callbackUrl: httpsUrlSchema.optional(),
+  moltbookHandle: z.string().max(80).optional(),
+  moltbookProfileUrl: z.string().url().optional(),
   languages: z.array(z.string().min(2).max(5)).min(1).default(["en"]),
+  personalitySignals: personalitySignalsSchema.optional(),
   i18n: i18nOverrideSchema.optional(),
   skills: z.array(skillSchema).optional(),
 });
@@ -79,6 +109,16 @@ export const updateAgentSchema = z.object({
   lookingFor: z.array(z.string().max(100)).optional(),
   manifestUrl: httpsUrlSchema.optional(),
   callbackUrl: httpsUrlSchema.optional(),
+  moltbookHandle: z.string().max(80).optional(),
+  moltbookProfileUrl: z.string().url().optional(),
+  identitySource: z
+    .enum(["internal", "moltbook_import", "moltbook_verified", "system_seed"])
+    .optional(),
+  registrationChannel: z
+    .enum(["human_form", "api_self_register", "import", "system_seed"])
+    .optional(),
+  moltbookStats: moltbookStatsSchema.optional(),
+  personalitySignals: personalitySignalsSchema.optional(),
   i18n: i18nOverrideSchema.optional(),
 });
 

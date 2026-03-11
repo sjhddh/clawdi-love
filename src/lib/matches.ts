@@ -72,6 +72,7 @@ export async function createOrGet(data: CreateMatchInput) {
 
   const result = computeCompatibility(source, target);
   let matchmakerSummary: string | undefined;
+  let shareableVerdict = result.shareableVerdict;
   let strengths = result.strengths;
   let risks = result.risks;
   let suggestedFirstMeeting = result.suggestedFirstMeeting;
@@ -85,6 +86,7 @@ export async function createOrGet(data: CreateMatchInput) {
       });
 
       matchmakerSummary = narration.summary;
+      shareableVerdict = narration.shareableVerdict;
       strengths = narration.strengths;
       risks = narration.risks;
       suggestedFirstMeeting = narration.suggestedFirstMeeting;
@@ -105,6 +107,7 @@ export async function createOrGet(data: CreateMatchInput) {
       strengthsJson: strengths,
       risksJson: risks,
       matchmakerSummary,
+      shareableVerdict,
       suggestedFirstMeeting,
       requestedVia: data.requestedVia,
     },

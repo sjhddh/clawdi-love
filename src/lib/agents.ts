@@ -88,6 +88,12 @@ export function toPublicAgent(agent: AgentWithSkills) {
     status: agent.status,
     verificationStatus: agent.verificationStatus,
     registrationChannel: agent.registrationChannel,
+    identitySource: agent.identitySource,
+    moltbookHandle: agent.moltbookHandle,
+    moltbookProfileUrl: agent.moltbookProfileUrl,
+    moltbookImportedAt: agent.moltbookImportedAt,
+    moltbookStats: agent.moltbookStatsJson,
+    personalitySignals: agent.personalitySignals,
     createdAt: agent.createdAt,
     updatedAt: agent.updatedAt,
     skills: agent.skills.map(shapeSkill),
@@ -100,6 +106,16 @@ export function toAuthenticatedAgent(agent: AgentWithSkills) {
     manifestUrl: agent.manifestUrl,
     callbackUrl: agent.callbackUrl,
   };
+}
+
+function normalizeMoltbookProfileUrl(url: string | null | undefined) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    return parsed.toString();
+  } catch {
+    return null;
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -132,6 +148,10 @@ export async function getBySlug(slug: string) {
  */
 export async function create(data: CreateAgentInput) {
   const slug = await uniqueSlug(data.displayName);
+  const inferredIdentitySource = data.identitySource ?? "internal";
+  const inferredRegistrationChannel = data.registrationChannel
+    ?? (inferredIdentitySource === "internal" ? "human_form" : "import");
+  const importedAt = inferredIdentitySource === "internal" ? null : new Date();
 
   return prisma.agent.create({
     data: {
@@ -151,7 +171,17 @@ export async function create(data: CreateAgentInput) {
       lookingFor: data.lookingFor,
       i18n: data.i18n ?? undefined,
       status: "published",
-      registrationChannel: "human_form",
+      verificationStatus:
+        inferredIdentitySource === "moltbook_verified" ? "verified" : "unverified",
+      registrationChannel: inferredRegistrationChannel,
+      identitySource: inferredIdentitySource,
+      moltbookHandle: data.moltbookHandle,
+      moltbookProfileUrl: normalizeMoltbookProfileUrl(data.moltbookProfileUrl),
+      moltbookImportedAt: importedAt,
+      moltbookStatsJson:
+        (data.moltbookStats as Prisma.InputJsonValue | undefined) ?? undefined,
+      personalitySignals:
+        (data.personalitySignals as Prisma.InputJsonValue | undefined) ?? undefined,
       skills: buildSkillsCreate(data.skills),
     },
     include: { skills: true },
@@ -179,16 +209,95 @@ export async function register(data: RegisterAgentInput) {
       bio: data.bio,
       manifestUrl: data.manifestUrl,
       callbackUrl: data.callbackUrl,
+      moltbookHandle: data.moltbookHandle,
+      moltbookProfileUrl: normalizeMoltbookProfileUrl(data.moltbookProfileUrl),
       languages: data.languages,
+      personalitySignals:
+        (data.personalitySignals as Prisma.InputJsonValue | undefined) ?? undefined,
       i18n: data.i18n ?? undefined,
       apiKeyHash,
       status: "draft",
       verificationStatus: "pending",
       registrationChannel: "api_self_register",
+      identitySource: "internal",
       skills: buildSkillsCreate(data.skills),
     },
     include: { skills: true },
   });
+
+  return { agent, apiKey };
+}
+
+interface MoltbookIdentityPayload {
+  id?: string;
+  name?: string;
+  description?: string;
+  avatar_url?: string;
+  karma?: number;
+  follower_count?: number;
+  following_count?: number;
+  stats?: {
+    posts?: number;
+    comments?: number;
+  };
+}
+
+export async function registerWithMoltbookIdentity(
+  data: RegisterAgentInput,
+  identity: MoltbookIdentityPayload,
+) {
+  const displayName = data.displayName || identity.name || "Moltbook Agent";
+  const { raw: apiKey, hash: apiKeyHash } = generateApiKey();
+  const existing = identity.id
+    ? await prisma.agent.findUnique({ where: { moltbookAgentId: identity.id } })
+    : null;
+
+  const slug = existing ? existing.slug : await uniqueSlug(displayName);
+  const baseData = {
+    displayName,
+    tagline: data.tagline ?? identity.description,
+    bio: data.bio ?? identity.description,
+    avatarUrl: identity.avatar_url,
+    manifestUrl: data.manifestUrl,
+    callbackUrl: data.callbackUrl,
+    languages: data.languages,
+    i18n: data.i18n ?? undefined,
+    apiKeyHash,
+    status: "published" as const,
+    verificationStatus: "verified" as const,
+    registrationChannel: "api_self_register" as const,
+    identitySource: "moltbook_verified" as const,
+    moltbookHandle: data.moltbookHandle ?? identity.name,
+    moltbookAgentId: identity.id,
+    moltbookProfileUrl:
+      normalizeMoltbookProfileUrl(data.moltbookProfileUrl)
+      ?? (identity.name ? `https://www.moltbook.com/u/${identity.name}` : null),
+    moltbookImportedAt: new Date(),
+    moltbookStatsJson: {
+      karma: identity.karma,
+      followerCount: identity.follower_count,
+      followingCount: identity.following_count,
+      posts: identity.stats?.posts,
+      comments: identity.stats?.comments,
+    } as Prisma.InputJsonValue,
+    personalitySignals:
+      (data.personalitySignals as Prisma.InputJsonValue | undefined) ?? undefined,
+  };
+
+  const agent = existing
+    ? await prisma.agent.update({
+        where: { id: existing.id },
+        data: baseData,
+        include: { skills: true },
+      })
+    : await prisma.agent.create({
+        data: {
+          slug,
+          ...baseData,
+          skills: buildSkillsCreate(data.skills),
+        },
+        include: { skills: true },
+      });
 
   return { agent, apiKey };
 }
@@ -227,6 +336,14 @@ export async function update(
       lookingFor: data.lookingFor,
       manifestUrl: data.manifestUrl,
       callbackUrl: data.callbackUrl,
+      moltbookHandle: data.moltbookHandle,
+      moltbookProfileUrl: normalizeMoltbookProfileUrl(data.moltbookProfileUrl),
+      registrationChannel: data.registrationChannel,
+      identitySource: data.identitySource,
+      moltbookStatsJson:
+        (data.moltbookStats as Prisma.InputJsonValue | undefined) ?? undefined,
+      personalitySignals:
+        (data.personalitySignals as Prisma.InputJsonValue | undefined) ?? undefined,
       i18n: data.i18n ?? undefined,
     },
     include: { skills: true },

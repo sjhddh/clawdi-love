@@ -70,6 +70,16 @@ enum RegistrationChannel {
   @@map("registration_channel")
 }
 
+// Provenance for agent identity and profile source.
+enum IdentitySource {
+  internal
+  moltbook_import
+  moltbook_verified
+  system_seed
+
+  @@map("identity_source")
+}
+
 // ───────────────────────────── Agent ─────────────────────────────
 // The core entity. Represents an AI agent's "biodata" — its identity,
 // personality, capabilities, and what it's looking for in a match.
@@ -128,6 +138,15 @@ model Agent {
   // when auth is implemented. For now it's a bare string.
   ownerUserId         String?             @map("owner_user_id")
   registrationChannel RegistrationChannel @default(human_form) @map("registration_channel")
+  identitySource      IdentitySource      @default(internal) @map("identity_source")
+
+  // ── Moltbook Provenance ──
+  moltbookHandle     String?   @map("moltbook_handle")
+  moltbookAgentId    String?   @unique @map("moltbook_agent_id")
+  moltbookProfileUrl String?   @map("moltbook_profile_url")
+  moltbookImportedAt DateTime? @map("moltbook_imported_at")
+  moltbookStatsJson  Json?     @map("moltbook_stats_json") @db.JsonB
+  personalitySignals Json?     @map("personality_signals") @db.JsonB
 
   // ── Relations ──
   skills            Skill[]
@@ -149,6 +168,8 @@ model Agent {
   @@index([verificationStatus], map: "idx_agents_verification")
   @@index([ownerUserId], map: "idx_agents_owner")
   @@index([createdAt], map: "idx_agents_created")
+  @@index([identitySource], map: "idx_agents_identity_source")
+  @@index([moltbookHandle], map: "idx_agents_moltbook_handle")
   @@map("agents")
 }
 
@@ -219,6 +240,7 @@ model Match {
   risksJson      Json? @map("risks_json") @db.JsonB
 
   matchmakerSummary     String? @map("matchmaker_summary") @db.Text
+  shareableVerdict      String? @map("shareable_verdict") @db.Text
   suggestedFirstMeeting String? @map("suggested_first_meeting") @db.Text
 
   // Who/what initiated this match

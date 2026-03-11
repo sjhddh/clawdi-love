@@ -11,6 +11,7 @@ import { OrnamentalDivider } from "@/components/shared/ornamental-divider";
 import { SectionContainer } from "@/components/shared/section-container";
 import type { MatchDimensions } from "@/types";
 import { SendProposalButton } from "@/components/match/send-proposal-button";
+import { SharePanel } from "@/components/shared/share-panel";
 
 const DISPLAY = "'Playfair Display', Georgia, serif";
 const BODY = "Inter, sans-serif";
@@ -74,8 +75,22 @@ export default async function MatchReportPage({ params }: Props) {
   const strengths = (match.strengthsJson as unknown as string[]) || [];
   const risks = (match.risksJson as unknown as string[]) || [];
   const matchmakerSummary = match.matchmakerSummary;
+  const shareableVerdict = match.shareableVerdict;
   const verdict = (match.verdict as keyof typeof VERDICT_STYLES) || "moderate";
   const vs = VERDICT_STYLES[verdict];
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(
+    /\/$/,
+    "",
+  );
+  const matchUrl = `${baseUrl}/matches/${match.id}`;
+  const matchShareText = [
+    `Clawdi match verdict: ${match.sourceAgent.displayName} x ${match.targetAgent.displayName}`,
+    `Compatibility: ${match.compatibilityScore}% (${vs.label})`,
+    shareableVerdict || matchmakerSummary || "",
+    strengths[0] ? `Highlight: ${strengths[0]}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   return (
     <>
@@ -92,8 +107,8 @@ export default async function MatchReportPage({ params }: Props) {
           </Link>
 
           {/* Verdict Hero */}
-          <div className="bg-white rounded-2xl border border-[#592B41]/[0.06] shadow-xl overflow-hidden mb-8">
-            <div className="h-1.5 w-full bg-gradient-to-r from-[#592B41] via-[#E87A5D] to-[#592B41]" />
+          <div className="bg-white rounded-2xl border border-[#592B41]/6 shadow-xl overflow-hidden mb-8">
+            <div className="h-1.5 w-full bg-linear-to-r from-[#592B41] via-[#E87A5D] to-[#592B41]" />
 
             <div className="p-8 md:p-10 text-center">
               <span
@@ -132,11 +147,19 @@ export default async function MatchReportPage({ params }: Props) {
                   {matchmakerSummary}
                 </p>
               )}
+              {shareableVerdict && (
+                <p
+                  className="mt-3 max-w-2xl mx-auto text-sm text-[#592B41]/75 italic"
+                  style={{ fontFamily: BODY }}
+                >
+                  Share-card line: {shareableVerdict}
+                </p>
+              )}
             </div>
           </div>
 
           {/* Dimensions */}
-          <div className="bg-white rounded-2xl border border-[#592B41]/[0.06] shadow-lg p-8 mb-8">
+          <div className="bg-white rounded-2xl border border-[#592B41]/6 shadow-lg p-8 mb-8">
             <h2
               className="text-[#592B41] mb-6"
               style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: "1.15rem" }}
@@ -207,6 +230,14 @@ export default async function MatchReportPage({ params }: Props) {
               </p>
             </div>
           )}
+
+          <div className="mb-8">
+            <SharePanel
+              title="Match report"
+              shareText={matchShareText}
+              shareUrl={matchUrl}
+            />
+          </div>
 
           <SendProposalButton match={match} />
         </SectionContainer>

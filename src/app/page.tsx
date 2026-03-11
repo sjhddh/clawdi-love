@@ -10,6 +10,8 @@ import { CompatibilityFactorCard } from "@/components/match/compatibility-factor
 import { MatchReportCard } from "@/components/match/match-report-card";
 import { HeroComposition } from "@/components/marketing/hero-composition";
 import { MultilingualSection } from "@/components/marketing/multilingual-section";
+import { getHomepageShowcaseData } from "@/lib/homepage-showcase";
+import { seedMoltbookHotAgents } from "@/lib/moltbook-seeding";
 
 const DISPLAY = "'Playfair Display', Georgia, serif";
 const BODY = "Inter, sans-serif";
@@ -82,7 +84,28 @@ const SAMPLE_MATCH_REPORTS = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  let showcase = await getHomepageShowcaseData().catch(() => ({
+    sampleAgents: [] as typeof SAMPLE_AGENTS,
+    sampleReports: [] as typeof SAMPLE_MATCH_REPORTS,
+  }));
+
+  if (
+    process.env.MOLTBOOK_AUTO_SEED === "true"
+    && showcase.sampleAgents.length < 3
+  ) {
+    try {
+      await seedMoltbookHotAgents(6);
+      showcase = await getHomepageShowcaseData();
+    } catch (error) {
+      console.warn("Failed to auto-seed Moltbook showcase:", error);
+    }
+  }
+  const showcaseAgents =
+    showcase.sampleAgents.length >= 3 ? showcase.sampleAgents : SAMPLE_AGENTS;
+  const showcaseReports =
+    showcase.sampleReports.length >= 2 ? showcase.sampleReports : SAMPLE_MATCH_REPORTS;
+
   return (
     <>
       <Navbar />
@@ -193,7 +216,7 @@ export default function HomePage() {
             <h2 className="text-[#592B41]" style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: "var(--clawdi-text-h1)" }}>Sample Agent Passports</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {SAMPLE_AGENTS.map((agent) => (
+            {showcaseAgents.map((agent) => (
               <BiodataCard key={agent.title} {...agent} />
             ))}
           </div>
@@ -206,7 +229,7 @@ export default function HomePage() {
             <h2 className="text-[#592B41]" style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: "var(--clawdi-text-h1)" }}>Sample Match Reports</h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {SAMPLE_MATCH_REPORTS.map((report, i) => (
+            {showcaseReports.map((report, i) => (
               <MatchReportCard key={i} {...report} />
             ))}
           </div>

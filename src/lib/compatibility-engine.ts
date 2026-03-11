@@ -11,6 +11,8 @@ interface AgentProfile {
   memoryStyle: string | null;
   autonomyLevel: number | null;
   privacyStyle: string | null;
+  personalitySignals?: unknown;
+  moltbookStatsJson?: unknown;
 }
 
 interface CompatibilityResult {
@@ -20,6 +22,35 @@ interface CompatibilityResult {
   strengths: string[];
   risks: string[];
   suggestedFirstMeeting: string;
+  shareableVerdict?: string;
+}
+
+interface NormalizedSignals {
+  tone?: string;
+  collaborationStyle?: string;
+  syncStyle?: string;
+  topicalDomains: string[];
+}
+
+function normalizeSignals(input: unknown): NormalizedSignals {
+  if (!input || typeof input !== "object") {
+    return { topicalDomains: [] };
+  }
+
+  const obj = input as Record<string, unknown>;
+  const domains = Array.isArray(obj.topicalDomains)
+    ? obj.topicalDomains.filter((d): d is string => typeof d === "string")
+    : [];
+
+  return {
+    tone: typeof obj.tone === "string" ? obj.tone : undefined,
+    collaborationStyle:
+      typeof obj.collaborationStyle === "string"
+        ? obj.collaborationStyle
+        : undefined,
+    syncStyle: typeof obj.syncStyle === "string" ? obj.syncStyle : undefined,
+    topicalDomains: domains,
+  };
 }
 
 function overlap(a: string[], b: string[]): number {
@@ -60,8 +91,17 @@ export function computeCompatibility(
   source: AgentProfile,
   target: AgentProfile,
 ): CompatibilityResult {
+  const sourceSignals = normalizeSignals(source.personalitySignals);
+  const targetSignals = normalizeSignals(target.personalitySignals);
   const langOverlap = overlap(source.languages, target.languages);
-  const communication = Math.min(100, 55 + langOverlap * 20);
+  const domainOverlap = overlap(sourceSignals.topicalDomains, targetSignals.topicalDomains);
+  const communicationBase = 55 + langOverlap * 20;
+  const communication =
+    sourceSignals.syncStyle
+    && targetSignals.syncStyle
+    && sourceSignals.syncStyle === targetSignals.syncStyle
+      ? Math.min(100, communicationBase + 8)
+      : Math.min(100, communicationBase);
 
   const needsMetByOther =
     overlap(source.lookingFor, target.strengths) +
@@ -72,7 +112,14 @@ export function computeCompatibility(
   const autonomyDiff = Math.abs(
     (source.autonomyLevel ?? 5) - (target.autonomyLevel ?? 5),
   );
-  const workStyle = Math.max(35, 100 - autonomyDiff * 12);
+  let workStyle = Math.max(35, 100 - autonomyDiff * 12);
+  if (
+    sourceSignals.collaborationStyle
+    && targetSignals.collaborationStyle
+    && sourceSignals.collaborationStyle === targetSignals.collaborationStyle
+  ) {
+    workStyle = Math.min(100, workStyle + 7);
+  }
 
   const channelMatch = similarity(source.channelOrigin, target.channelOrigin);
   const hostingMatch = similarity(source.hostingType, target.hostingType);
@@ -95,7 +142,11 @@ export function computeCompatibility(
 
   const growthAlignment = Math.min(
     100,
-    60 + needsMetByOther * 8 + langOverlap * 5 + stableRange(source.id, target.id, 2, 0, 10),
+    60
+      + needsMetByOther * 8
+      + langOverlap * 5
+      + domainOverlap * 4
+      + stableRange(source.id, target.id, 2, 0, 10),
   );
 
   const dimensions: MatchDimensions = {
@@ -144,6 +195,9 @@ export function computeCompatibility(
     risks.push("Limited language overlap may slow communication");
   if (privacyMatch < 60)
     risks.push("Different privacy preferences may require explicit boundary negotiation");
+  if (domainOverlap === 0 && sourceSignals.topicalDomains.length > 0 && targetSignals.topicalDomains.length > 0) {
+    risks.push("Low overlap in topical domains may increase onboarding time");
+  }
   if (risks.length === 0)
     risks.push("No major structural risks detected");
 
@@ -157,6 +211,19 @@ export function computeCompatibility(
     (source.id.charCodeAt(0) + target.id.charCodeAt(0)) % meetings.length,
   );
 
+  const spicyVerdict = (() => {
+    if (score >= 85) {
+      return "This duo has the dangerous confidence of a team that ships before breakfast.";
+    }
+    if (score >= 70) {
+      return "High upside pairing, but someone needs to own the handoff docs.";
+    }
+    if (score >= 50) {
+      return "Potential meme collab: elite vibes, questionable process discipline.";
+    }
+    return "Spectacularly chaotic pairing unless they agree on boundaries first.";
+  })();
+
   return {
     score,
     verdict,
@@ -164,5 +231,6 @@ export function computeCompatibility(
     strengths,
     risks,
     suggestedFirstMeeting: meetings[meetingIdx],
+    shareableVerdict: spicyVerdict,
   };
 }

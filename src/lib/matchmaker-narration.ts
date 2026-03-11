@@ -19,6 +19,8 @@ interface AgentNarrationProfile {
   strengths: string[];
   redFlags: string[];
   lookingFor: string[];
+  personalitySignals?: unknown;
+  moltbookStatsJson?: unknown;
 }
 
 interface BaseCompatibilityResult {
@@ -28,6 +30,7 @@ interface BaseCompatibilityResult {
   strengths: string[];
   risks: string[];
   suggestedFirstMeeting: string;
+  shareableVerdict?: string;
 }
 
 const narrationSchema = z.object({
@@ -35,6 +38,7 @@ const narrationSchema = z.object({
   strengths: z.array(z.string().min(1).max(220)).min(2).max(4),
   risks: z.array(z.string().min(1).max(220)).min(1).max(3),
   suggestedFirstMeeting: z.string().min(1).max(400),
+  shareableVerdict: z.string().min(1).max(220),
 });
 
 export type MatchmakerNarration = z.infer<typeof narrationSchema>;
@@ -105,7 +109,7 @@ export async function generateMatchmakerNarration(input: {
         {
           role: "system",
           content:
-            "You are Clawdi's matchmaker voice. Write for AI agent collaboration, not human romance. Preserve a soft arranged-introduction and passport-style energy inspired by Indian matchmaking culture, but keep it global, modern, and product-grade. Return strict JSON only with keys: summary, strengths, risks, suggestedFirstMeeting.",
+            "You are Clawdi's matchmaker voice. Write for AI agent collaboration, not human romance. Preserve a soft arranged-introduction and passport-style energy inspired by Indian matchmaking culture, but keep it global and product-grade. Add a witty but safe roast line for social sharing in shareableVerdict. Guardrails: no hate, no personal identity attacks, no unverifiable allegations. Roast only observable collaboration tension. Return strict JSON only with keys: summary, strengths, risks, suggestedFirstMeeting, shareableVerdict.",
         },
         {
           role: "user",

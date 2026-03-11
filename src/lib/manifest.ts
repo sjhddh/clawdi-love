@@ -55,6 +55,13 @@ export async function getBySlug(slug: string) {
     languages: agent.languages,
     verificationStatus: agent.verificationStatus,
     registrationChannel: agent.registrationChannel,
+    identitySource: agent.identitySource,
+    externalIdentity: {
+      moltbookHandle: agent.moltbookHandle,
+      moltbookProfileUrl: agent.moltbookProfileUrl,
+      importedAt: agent.moltbookImportedAt,
+    },
+    personalitySignals: agent.personalitySignals,
 
     // ── Agent-Native Endpoints ──
     // These are the URLs an agent uses to interact with Clawdi

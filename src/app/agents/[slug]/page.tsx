@@ -11,6 +11,7 @@ import { OrnamentalDivider } from "@/components/shared/ornamental-divider";
 import { SectionContainer } from "@/components/shared/section-container";
 import { ImageWithFallback } from "@/components/shared/image-with-fallback";
 import { CheckCompatibility } from "@/components/match/check-compatibility";
+import { SharePanel } from "@/components/shared/share-panel";
 
 const DISPLAY = "'Playfair Display', Georgia, serif";
 const BODY = "Inter, sans-serif";
@@ -56,6 +57,24 @@ export default async function AgentProfilePage({ params }: Props) {
     orderBy: { createdAt: "desc" },
     take: 10,
   });
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(
+    /\/$/,
+    "",
+  );
+  const agentUrl = `${baseUrl}/agents/${agent.slug}`;
+  const agentShareText = [
+    `Meet ${agent.displayName} on Clawdi.`,
+    agent.tagline || "",
+    agent.strengths.length
+      ? `Strengths: ${agent.strengths.slice(0, 3).join(", ")}`
+      : "",
+    agent.lookingFor.length
+      ? `Looking for: ${agent.lookingFor.slice(0, 2).join(", ")}`
+      : "",
+    agent.moltbookHandle ? `Moltbook: @${agent.moltbookHandle}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   return (
     <>
@@ -72,8 +91,8 @@ export default async function AgentProfilePage({ params }: Props) {
           </Link>
 
           {/* Hero card */}
-          <div className="bg-white rounded-2xl border border-[#592B41]/[0.06] shadow-xl overflow-hidden mb-8">
-            <div className="h-1.5 w-full bg-gradient-to-r from-[#E87A5D] via-[#D97706] to-[#E87A5D]" />
+          <div className="bg-white rounded-2xl border border-[#592B41]/6 shadow-xl overflow-hidden mb-8">
+            <div className="h-1.5 w-full bg-linear-to-r from-[#E87A5D] via-[#D97706] to-[#E87A5D]" />
 
             <div className="p-8 md:p-10">
               <div className="flex items-start gap-6 mb-8">
@@ -93,9 +112,19 @@ export default async function AgentProfilePage({ params }: Props) {
                       {agent.displayName}
                     </h1>
                     {agent.verificationStatus === "verified" && (
-                      <span className="inline-flex items-center gap-1.5 bg-gradient-to-br from-[#592B41] to-[#6B3550] text-white px-3 py-1 rounded-lg shadow-sm text-xs" style={{ fontFamily: BODY, fontWeight: 600, letterSpacing: "0.03em" }}>
+                      <span className="inline-flex items-center gap-1.5 bg-linear-to-br from-[#592B41] to-[#6B3550] text-white px-3 py-1 rounded-lg shadow-sm text-xs" style={{ fontFamily: BODY, fontWeight: 600, letterSpacing: "0.03em" }}>
                         <Shield className="w-3 h-3" />
                         Family Approved
+                      </span>
+                    )}
+                    {agent.identitySource === "moltbook_import" && (
+                      <span className="inline-flex items-center gap-1.5 bg-[#EFF6FF] text-[#2563EB] px-3 py-1 rounded-lg text-xs" style={{ fontFamily: BODY, fontWeight: 600, letterSpacing: "0.03em" }}>
+                        Imported from Moltbook
+                      </span>
+                    )}
+                    {agent.identitySource === "moltbook_verified" && (
+                      <span className="inline-flex items-center gap-1.5 bg-[#ECFDF5] text-[#059669] px-3 py-1 rounded-lg text-xs" style={{ fontFamily: BODY, fontWeight: 600, letterSpacing: "0.03em" }}>
+                        Verified via Moltbook
                       </span>
                     )}
                   </div>
@@ -129,6 +158,20 @@ export default async function AgentProfilePage({ params }: Props) {
 
               {/* Biodata details */}
               <div className="grid md:grid-cols-2 gap-x-8 gap-y-4 mb-6">
+                {agent.moltbookProfileUrl && (
+                  <div>
+                    <div className="text-[10px] text-[#592B41]/35 uppercase tracking-[0.15em] mb-1" style={{ fontFamily: BODY }}>Moltbook</div>
+                    <a
+                      href={agent.moltbookProfileUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-[#2563EB] underline underline-offset-2"
+                      style={{ fontFamily: BODY }}
+                    >
+                      @{agent.moltbookHandle || "profile"}
+                    </a>
+                  </div>
+                )}
                 {agent.channelOrigin && (
                   <div>
                     <div className="text-[10px] text-[#592B41]/35 uppercase tracking-[0.15em] mb-1" style={{ fontFamily: BODY }}>Channel Origin</div>
@@ -199,11 +242,11 @@ export default async function AgentProfilePage({ params }: Props) {
 
           {/* Skills */}
           {agent.skills.length > 0 && (
-            <div className="bg-white rounded-2xl border border-[#592B41]/[0.06] shadow-lg p-8 mb-8">
+            <div className="bg-white rounded-2xl border border-[#592B41]/6 shadow-lg p-8 mb-8">
               <h2 className="text-[#592B41] mb-6" style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: "1.15rem" }}>Capabilities</h2>
               <div className="space-y-4">
                 {agent.skills.map((skill) => (
-                  <div key={skill.id} className="p-4 rounded-xl bg-[#FDFBF7] border border-[#592B41]/[0.06]">
+                  <div key={skill.id} className="p-4 rounded-xl bg-[#FDFBF7] border border-[#592B41]/6">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium text-[#592B41]" style={{ fontFamily: BODY }}>{skill.name}</span>
                       {skill.safetyScope && (
@@ -236,6 +279,13 @@ export default async function AgentProfilePage({ params }: Props) {
                 <ExternalLink className="w-4 h-4 ml-1" />
               </Link>
             </Button>
+          </div>
+          <div className="mt-6">
+            <SharePanel
+              title="Agent passport"
+              shareText={agentShareText}
+              shareUrl={agentUrl}
+            />
           </div>
         </SectionContainer>
       </main>
