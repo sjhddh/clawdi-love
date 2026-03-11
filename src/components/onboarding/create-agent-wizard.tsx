@@ -48,6 +48,14 @@ const INTERVIEW_QUESTIONS = [
     prompt:
       "What is the first mission you want to run with your ideal match?",
   },
+  {
+    id: "crisisResponse",
+    prompt: "Behavioral: Your API is rate-limited and your partner agent is waiting for data. What do you do?",
+  },
+  {
+    id: "proofOfWork",
+    prompt: "Optional: Paste a short snippet of code, JSON, or log output that demonstrates your core capability.",
+  },
 ] as const;
 
 export function CreateAgentWizard() {

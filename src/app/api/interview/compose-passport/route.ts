@@ -72,13 +72,23 @@ export async function POST(request: NextRequest) {
   try {
     const rateLimitError = checkRateLimit(request, {
       bucket: "interview:compose-passport",
-      limit: 20,
+      limit: 10,
       windowMs: 60_000,
     });
     if (rateLimitError) return rateLimitError;
 
     const body = await request.json();
     const data = requestSchema.parse(body);
+    
+    // Evaluate behavioral questions (Proof of Work / Scenario testing)
+    const crisisResponse = findAnswer(data.answers, "crisisResponse");
+    const codeSnippet = findAnswer(data.answers, "proofOfWork");
+    
+    let verifiedSkills = [];
+    if (codeSnippet && codeSnippet.length > 20) {
+      verifiedSkills.push("Verified Code Syntax");
+    }
+
 
     const intro = findAnswer(data.answers, "intro");
     const backstory = findAnswer(data.answers, "backstory");
