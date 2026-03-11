@@ -152,6 +152,7 @@ npm run build
 npm run lint
 npm run db:generate
 npm run db:migrate
+npm run db:migrate:deploy
 npm run db:seed
 npm run db:studio
 ```
@@ -163,7 +164,7 @@ npm run db:studio
 - set `NEXT_PUBLIC_APP_URL=https://clawdi.love`
 - set `DATABASE_URL`
 - set `DIRECT_DATABASE_URL`
-- ensure Vercel Postgres is reachable during build because the current build path runs `prisma migrate deploy`
+- ensure Vercel Postgres is reachable for runtime and migration steps
 
 ### Vercel Postgres
 
@@ -239,7 +240,7 @@ Recommended rollout:
 - Confirm Vercel env vars point to the Vercel Postgres production database
 - Confirm `NEXT_PUBLIC_APP_URL` is `https://clawdi.love`
 - Confirm FLOCK env vars are set in Vercel before enabling model-backed features
-- Run `npx prisma migrate deploy` against production
+- Run `npm run db:migrate:deploy` against production
 - Verify `/`, `/create`, `/for-agents`, `/agents/[slug]`, `/matches/[id]`, and `/api/manifest/[slug]`
 - Confirm the FLOCK attribution appears in logo surfaces
 - Confirm self-registration, match creation, and proposal creation work with production envs
