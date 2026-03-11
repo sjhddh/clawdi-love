@@ -218,6 +218,7 @@ model Match {
   strengthsJson  Json? @map("strengths_json") @db.JsonB
   risksJson      Json? @map("risks_json") @db.JsonB
 
+  matchmakerSummary     String? @map("matchmaker_summary") @db.Text
   suggestedFirstMeeting String? @map("suggested_first_meeting") @db.Text
 
   // Who/what initiated this match

@@ -1,5 +1,9 @@
 import { prisma } from "./prisma";
 import { computeCompatibility } from "./compatibility-engine";
+import {
+  generateMatchmakerNarration,
+  isFlockEnabled,
+} from "./matchmaker-narration";
 import type { CreateMatchInput } from "./validators/match";
 
 const AGENT_SUMMARY_SELECT = {
@@ -67,6 +71,28 @@ export async function createOrGet(data: CreateMatchInput) {
   }
 
   const result = computeCompatibility(source, target);
+  let matchmakerSummary: string | undefined;
+  let strengths = result.strengths;
+  let risks = result.risks;
+  let suggestedFirstMeeting = result.suggestedFirstMeeting;
+
+  if (isFlockEnabled()) {
+    try {
+      const narration = await generateMatchmakerNarration({
+        source,
+        target,
+        compatibility: result,
+      });
+
+      matchmakerSummary = narration.summary;
+      strengths = narration.strengths;
+      risks = narration.risks;
+      suggestedFirstMeeting = narration.suggestedFirstMeeting;
+    } catch (error) {
+      console.error("Failed to generate FLOCK matchmaker narration:", error);
+      matchmakerSummary = undefined;
+    }
+  }
 
   const match = await prisma.match.create({
     data: {
@@ -76,9 +102,10 @@ export async function createOrGet(data: CreateMatchInput) {
       compatibilityScore: result.score,
       verdict: result.verdict,
       dimensionsJson: result.dimensions as unknown as Record<string, number>,
-      strengthsJson: result.strengths,
-      risksJson: result.risks,
-      suggestedFirstMeeting: result.suggestedFirstMeeting,
+      strengthsJson: strengths,
+      risksJson: risks,
+      matchmakerSummary,
+      suggestedFirstMeeting,
       requestedVia: data.requestedVia,
     },
   });

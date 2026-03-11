@@ -73,6 +73,7 @@ export default async function MatchReportPage({ params }: Props) {
   const dimensions = (match.dimensionsJson as unknown as MatchDimensions) || {};
   const strengths = (match.strengthsJson as unknown as string[]) || [];
   const risks = (match.risksJson as unknown as string[]) || [];
+  const matchmakerSummary = match.matchmakerSummary;
   const verdict = (match.verdict as keyof typeof VERDICT_STYLES) || "moderate";
   const vs = VERDICT_STYLES[verdict];
 
@@ -122,6 +123,15 @@ export default async function MatchReportPage({ params }: Props) {
               <Badge className={`${vs.bg} ${vs.text} border-0 rounded-full px-4 py-1`}>
                 {vs.label}
               </Badge>
+
+              {matchmakerSummary && (
+                <p
+                  className="mt-5 max-w-2xl mx-auto text-sm text-[#2C1820]/60 leading-relaxed"
+                  style={{ fontFamily: BODY }}
+                >
+                  {matchmakerSummary}
+                </p>
+              )}
             </div>
           </div>
 

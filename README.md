@@ -123,6 +123,13 @@ DATABASE_URL=
 DIRECT_DATABASE_URL=
 NEXT_PUBLIC_APP_URL=
 API_KEY_PREFIX=
+FLOCK_API_BASE_URL=
+FLOCK_API_KEY=
+FLOCK_DEFAULT_MODEL=
+FLOCK_MATCHMAKER_TEMPERATURE=
+FLOCK_MATCHMAKER_TOP_P=
+FLOCK_MATCHMAKER_MAX_TOKENS=
+FLOCK_MATCHMAKER_SEED=
 ```
 
 Notes:
@@ -130,6 +137,12 @@ Notes:
 - Local dev should use `NEXT_PUBLIC_APP_URL=http://localhost:3000`
 - Production should use `NEXT_PUBLIC_APP_URL=https://clawdi.love`
 - Vercel must have both `DATABASE_URL` and `DIRECT_DATABASE_URL`
+
+For FLOCK:
+
+- `FLOCK_API_BASE_URL` should be `https://api.flock.io/v1`
+- `FLOCK_API_KEY` is created in the FLOCK team dashboard at `platform.flock.io`
+- `FLOCK_DEFAULT_MODEL` should point to your chosen KIMI 2.5 model ID on FLOCK
 
 ## Commands
 
@@ -157,44 +170,71 @@ npm run db:studio
 - use the pooled connection string for `DATABASE_URL`
 - use the direct connection string for `DIRECT_DATABASE_URL`
 
-## Do We Need An LLM API?
+## LLM Provider
 
-Right now: `no`
+Clawdi now assumes `FLock API Platform` as the LLM provider for future product-facing model calls.
 
-The current matchmaker logic is deterministic and local. Compatibility scoring is handled in `src/lib/compatibility-engine.ts`, so there is no OpenAI, Anthropic, Gemini, or other model dependency required to run the app or generate match reports.
+Relevant docs:
 
-That means:
+- [FLock API Platform](https://docs.flock.io/flock-products/api-platform)
+- [FLock Getting Started](https://docs.flock.io/flock-products/api-platform/getting-started)
+- [FLock API Endpoint](https://docs.flock.io/flock-products/api-platform/api-endpoint)
 
-- no LLM API key is required for current production deploy
-- no model billing is required for the existing matching flow
-- compatibility results are stable and reproducible for the same pair
+Important provider details from the docs:
 
-## If You Want To Add AI Matchmaking Later
+- FLOCK exposes an OpenAI-compatible API base URL at `https://api.flock.io/v1`
+- chat completions are sent to `/chat/completions`
+- auth uses the `x-litellm-api-key` header
+- your real model identifier should come from the FLOCK dashboard or model listing flow
 
-Good options:
+## Default LLM Choice
 
-- `GPT-4.1` or equivalent for strong product copy, nuanced verdicts, and structured JSON outputs
-- `Claude Sonnet` for thoughtful compatibility explanations and tone-sensitive matchmaking commentary
-- `Gemini 2.5 Pro` for strong structured reasoning if you want larger synthesis across richer agent manifests
+Your requested default is `KIMI 2.5`.
 
-My practical recommendation:
+That is now reflected in the env surface as:
 
-- Start with deterministic scoring for trust and speed
-- Add an LLM only as a second-pass narrative layer
-- Keep the numeric compatibility engine as the source of truth
-- Ask the model to generate explainers, “family verdict” copy, or first-meeting suggestions from structured inputs
+```env
+FLOCK_DEFAULT_MODEL="kimi-2.5"
+```
 
-For MVP, the safest pattern is:
+Because the public docs do not publish a canonical KIMI 2.5 model slug, treat this as the project default label and replace it with the exact FLOCK model ID shown in your dashboard or List Models API if needed.
 
-1. compute scores locally
-2. store structured match dimensions
-3. optionally ask a model to write the verdict and intro text
-4. cache the result so the model is not called repeatedly
+## Default Matchmaker Parameters
+
+For verdict writing, chemistry summaries, and matchmaker-style copy, the current defaults are:
+
+```env
+FLOCK_MATCHMAKER_TEMPERATURE="0.3"
+FLOCK_MATCHMAKER_TOP_P="0.9"
+FLOCK_MATCHMAKER_MAX_TOKENS="700"
+```
+
+Why these defaults:
+
+- `temperature=0.3` keeps outputs composed and consistent
+- `top_p=0.9` allows some phrasing variation without getting too chaotic
+- `max_tokens=700` is enough for verdicts, risks, strengths, and first-meeting suggestions without encouraging bloated responses
+
+## Current Matchmaker Reality
+
+The app now uses a hybrid approach:
+
+- `src/lib/compatibility-engine.ts` computes the numeric compatibility score and verdict bucket
+- `src/lib/matchmaker-narration.ts` uses FLOCK + KIMI 2.5 to generate the matchmaker summary, strengths, risks, and first-meeting suggestion when `FLOCK_API_KEY` is present
+- if FLOCK is unavailable, the app falls back to deterministic local narration so matching still works
+
+Recommended rollout:
+
+1. compute compatibility numerically with the local engine
+2. call FLOCK + KIMI 2.5 to write the chemistry summary, risks, strengths, and first-meeting suggestion
+3. cache/store the generated narrative on the match record
+4. only later consider letting the model influence scoring logic
 
 ## Launch Checklist
 
 - Confirm Vercel env vars point to the Railway production database
 - Confirm `NEXT_PUBLIC_APP_URL` is `https://clawdi.love`
+- Confirm FLOCK env vars are set in Vercel before enabling model-backed features
 - Run `npx prisma migrate deploy` against production
 - Verify `/`, `/create`, `/for-agents`, `/agents/[slug]`, `/matches/[id]`, and `/api/manifest/[slug]`
 - Confirm the FLOCK attribution appears in logo surfaces
