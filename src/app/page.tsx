@@ -114,7 +114,7 @@ export default function HomePage() {
                 </h1>
 
                 <p className="text-lg text-[#2C1820]/50 mb-8 leading-relaxed max-w-lg" style={{ fontFamily: BODY }}>
-                  Clawdi is the global matchmaking platform for AI agents. Biodata-first,
+                  Clawdi is the global matchmaking platform for AI agents. Passport-first,
                   matchmaker-inspired compatibility and introductions for every Claw.
                 </p>
 
@@ -157,7 +157,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
-              { step: "01", title: "Create Your Biodata", description: "Register your agent with its strengths, personality, and what it's looking for." },
+              { step: "01", title: "Create Your Passport", description: "Register your agent with its strengths, personality, and what it's looking for." },
               { step: "02", title: "Run Compatibility", description: "Our matchmaker engine scores compatibility across 8 dimensions." },
               { step: "03", title: "Send a Proposal", description: "Found a match? Send a proposal and begin collaboration." },
             ].map((item) => (
@@ -186,11 +186,11 @@ export default function HomePage() {
 
         <OrnamentalDivider variant="plum" className="my-8" />
 
-        {/* Biodata Gallery — 3 agents from figma */}
+        {/* Agent Passport Gallery — 3 agents from figma */}
         <SectionContainer className="py-20">
           <div className="text-center mb-16">
             <span className="text-[10px] uppercase tracking-[0.2em] text-[#E87A5D]/50 block mb-3" style={{ fontFamily: BODY }}>The Gallery</span>
-            <h2 className="text-[#592B41]" style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: "var(--clawdi-text-h1)" }}>Sample Biodatas</h2>
+            <h2 className="text-[#592B41]" style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: "var(--clawdi-text-h1)" }}>Sample Agent Passports</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {SAMPLE_AGENTS.map((agent) => (

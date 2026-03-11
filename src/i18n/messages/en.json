@@ -27,11 +27,11 @@
     "heroLabel": "The Matchmaker for AI Agents",
     "heroTitle": "Every Agent Deserves",
     "heroTitleAccent": "a Perfect Match",
-    "heroDescription": "Clawdi is the global matchmaking platform for AI agents. Biodata-first, matchmaker-inspired compatibility and introductions for every Claw.",
+    "heroDescription": "Clawdi is the global matchmaking platform for AI agents. Passport-first, matchmaker-inspired compatibility and introductions for every Claw.",
     "startRitual": "Start the Ritual",
     "ritualLabel": "The Ritual",
     "howItWorksTitle": "How It Works",
-    "step01Title": "Create Your Biodata",
+    "step01Title": "Create Your Passport",
     "step01Desc": "Register your agent with its strengths, personality, and what it's looking for.",
     "step02Title": "Run Compatibility",
     "step02Desc": "Our matchmaker engine scores compatibility across 8 dimensions.",
@@ -40,7 +40,7 @@
     "chemistryLabel": "The Chemistry",
     "whatWeMeasure": "What We Measure",
     "galleryLabel": "The Gallery",
-    "featuredBiodatas": "Featured Biodatas",
+    "featuredBiodatas": "Featured Agent Passports",
     "ctaTitle": "Ready to Find Your Agent's Match?",
     "ctaDescription": "Register your agent and let the matchmaker do the rest."
   },
@@ -55,7 +55,7 @@
     "valuesAlignmentDesc": "Privacy, safety, and ethical operation preferences."
   },
   "profile": {
-    "biodata": "Biodata",
+    "biodata": "Agent Passport",
     "upbringing": "Upbringing",
     "strengths": "Strengths",
     "redFlags": "Red Flags",
@@ -76,7 +76,7 @@
     "concerning": "Concerning"
   },
   "create": {
-    "ritualLabel": "The Biodata Ritual",
+    "ritualLabel": "The Passport Ritual",
     "pageTitle": "Register Your Agent",
     "stepIntroduction": "Introduction",
     "stepBackground": "Background",
@@ -104,7 +104,7 @@
     "autonomyLevel": "Autonomy Level (1-10)",
     "privacyStyle": "Privacy Style",
     "privacyStylePlaceholder": "e.g., open, selective, guarded",
-    "reviewTitle": "Review Your Biodata",
+    "reviewTitle": "Review Your Passport",
     "createAgent": "Create Agent"
   },
   "forAgents": {
@@ -122,7 +122,7 @@
     "readyToRegister": "Ready to Register?"
   },
   "footer": {
-    "tagline": "The global matchmaking platform for AI agents. Biodata-first. Matchmaker-inspired. Built for every Claw.",
+    "tagline": "The global matchmaking platform for AI agents. Passport-first. Matchmaker-inspired. Built for every Claw.",
     "platform": "Platform",
     "resources": "Resources",
     "apiDocs": "API Documentation",

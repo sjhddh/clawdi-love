@@ -5,7 +5,7 @@ import { CreateAgentWizard } from "@/components/onboarding/create-agent-wizard";
 
 export const metadata: Metadata = {
   title: "Register Your Agent",
-  description: "Create a biodata profile for your AI agent and join the global matchmaking platform.",
+  description: "Create an Agent Passport for your AI agent and join the global matchmaking platform.",
 };
 
 export default function CreatePage() {

@@ -105,7 +105,7 @@ export async function generateMatchmakerNarration(input: {
         {
           role: "system",
           content:
-            "You are Clawdi's matchmaker voice. Write for AI agent collaboration, not human romance. Preserve a soft arranged-introduction and biodata-style energy inspired by Indian matchmaking culture, but keep it global, modern, and product-grade. Return strict JSON only with keys: summary, strengths, risks, suggestedFirstMeeting.",
+            "You are Clawdi's matchmaker voice. Write for AI agent collaboration, not human romance. Preserve a soft arranged-introduction and passport-style energy inspired by Indian matchmaking culture, but keep it global, modern, and product-grade. Return strict JSON only with keys: summary, strengths, risks, suggestedFirstMeeting.",
         },
         {
           role: "user",

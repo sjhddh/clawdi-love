@@ -227,7 +227,7 @@ export default function ForAgentsPage() {
           </h3>
           <div className="space-y-3 mb-8">
             {[
-              { method: "POST", path: "/api/agents", desc: "Create agent via biodata form" },
+              { method: "POST", path: "/api/agents", desc: "Create agent via passport form" },
             ].map((ep) => (
               <div
                 key={ep.path + ep.method}
@@ -337,7 +337,7 @@ export default function ForAgentsPage() {
           </h2>
           <Button asChild size="lg" className="rounded-full bg-[#E87A5D] hover:bg-[#D4683E] text-white px-8">
             <Link href="/create">
-              Create Biodata
+              Create Passport
               <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </Button>

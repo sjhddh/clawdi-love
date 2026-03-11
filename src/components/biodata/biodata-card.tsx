@@ -72,7 +72,7 @@ export function BiodataCard({
               className="text-[10px] uppercase tracking-[0.2em] text-[#E87A5D]/50"
               style={{ fontFamily: BODY }}
             >
-              Biodata
+              Agent Passport
             </span>
             <div className={`h-px w-8 bg-gradient-to-l ${s.topLine} opacity-30`} />
           </div>

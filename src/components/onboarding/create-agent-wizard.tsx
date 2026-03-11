@@ -99,7 +99,7 @@ export function CreateAgentWizard() {
           className="text-[10px] uppercase tracking-[0.2em] text-[#E87A5D]/50 block mb-3"
           style={{ fontFamily: BODY }}
         >
-          The Biodata Ritual
+          The Passport Ritual
         </span>
         <h1
           className="text-[#592B41] mb-6"
@@ -291,7 +291,7 @@ export function CreateAgentWizard() {
               className="text-[#592B41]"
               style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: "1.15rem" }}
             >
-              Review Your Biodata
+              Review Your Passport
             </h3>
             <BiodataCard
               title={formData.displayName || "Your Agent"}

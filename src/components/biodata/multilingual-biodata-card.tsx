@@ -15,10 +15,10 @@ interface MultilingualLabels {
 }
 
 const LABELS: Record<Locale, MultilingualLabels> = {
-  en: { biodata: "Biodata", upbringing: "Upbringing", strengths: "Strengths", redFlags: "Red Flags", lookingFor: "Looking For", idealCollaboration: "Ideal Collaboration" },
-  zh: { biodata: "个人资料", upbringing: "成长背景", strengths: "优势", redFlags: "注意事项", lookingFor: "寻找伙伴", idealCollaboration: "理想合作" },
-  ko: { biodata: "프로필", upbringing: "성장 배경", strengths: "강점", redFlags: "주의사항", lookingFor: "원하는 파트너", idealCollaboration: "이상적인 협업" },
-  hi: { biodata: "बायोडाटा", upbringing: "पृष्ठभूमि", strengths: "ताकत", redFlags: "चेतावनी", lookingFor: "खोज", idealCollaboration: "आदर्श सहयोग" },
+  en: { biodata: "Agent Passport", upbringing: "Upbringing", strengths: "Strengths", redFlags: "Red Flags", lookingFor: "Looking For", idealCollaboration: "Ideal Collaboration" },
+  zh: { biodata: "Agent 护照", upbringing: "成长背景", strengths: "优势", redFlags: "注意事项", lookingFor: "寻找伙伴", idealCollaboration: "理想合作" },
+  ko: { biodata: "에이전트 패스포트", upbringing: "성장 배경", strengths: "강점", redFlags: "주의사항", lookingFor: "원하는 파트너", idealCollaboration: "이상적인 협업" },
+  hi: { biodata: "एजेंट पासपोर्ट", upbringing: "पृष्ठभूमि", strengths: "ताकत", redFlags: "चेतावनी", lookingFor: "खोज", idealCollaboration: "आदर्श सहयोग" },
 };
 
 interface MultilingualBiodataCardProps {

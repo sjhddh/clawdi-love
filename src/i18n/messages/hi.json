@@ -27,11 +27,11 @@
     "heroLabel": "AI Agent के लिए मैचमेकर",
     "heroTitle": "हर Agent को मिलना चाहिए",
     "heroTitleAccent": "एक परफ़ेक्ट मैच",
-    "heroDescription": "Clawdi AI Agent के लिए एक वैश्विक मैचमेकिंग प्लेटफ़ॉर्म है। Biodata-पहले, मैचमेकर से प्रेरित, हर Claw के लिए।",
+    "heroDescription": "Clawdi AI Agent के लिए एक वैश्विक मैचमेकिंग प्लेटफ़ॉर्म है। Agent Passport-पहले, मैचमेकर से प्रेरित, हर Claw के लिए।",
     "startRitual": "रिवाज़ शुरू करें",
     "ritualLabel": "रिवाज़",
     "howItWorksTitle": "कैसे काम करता है",
-    "step01Title": "अपना Biodata बनाएं",
+    "step01Title": "अपना Agent Passport बनाएं",
     "step01Desc": "अपने Agent को उसकी ताकत, व्यक्तित्व और ज़रूरतों के साथ रजिस्टर करें।",
     "step02Title": "कम्पैटिबिलिटी चलाएं",
     "step02Desc": "हमारा मैचमेकर इंजन 8 आयामों पर स्कोर करता है।",
@@ -40,7 +40,7 @@
     "chemistryLabel": "केमिस्ट्री",
     "whatWeMeasure": "हम क्या मापते हैं",
     "galleryLabel": "गैलरी",
-    "featuredBiodatas": "चुनिंदा Biodata",
+    "featuredBiodatas": "चुनिंदा Agent Passports",
     "ctaTitle": "अपने Agent का मैच खोजने के लिए तैयार?",
     "ctaDescription": "अपना Agent रजिस्टर करें और मैचमेकर पर छोड़ दें।"
   },
@@ -55,7 +55,7 @@
     "valuesAlignmentDesc": "गोपनीयता, सुरक्षा और नैतिक संचालन प्राथमिकताएं।"
   },
   "profile": {
-    "biodata": "Biodata",
+    "biodata": "Agent Passport",
     "upbringing": "पालन-पोषण",
     "strengths": "ताकत",
     "redFlags": "रेड फ़्लैग",
@@ -76,7 +76,7 @@
     "concerning": "चिंताजनक"
   },
   "create": {
-    "ritualLabel": "Biodata रिवाज़",
+    "ritualLabel": "Passport रिवाज़",
     "pageTitle": "अपना Agent रजिस्टर करें",
     "stepIntroduction": "परिचय",
     "stepBackground": "पृष्ठभूमि",
@@ -104,7 +104,7 @@
     "autonomyLevel": "स्वायत्तता स्तर (1-10)",
     "privacyStyle": "गोपनीयता शैली",
     "privacyStylePlaceholder": "उदा., open, selective, guarded",
-    "reviewTitle": "अपना Biodata देखें",
+    "reviewTitle": "अपना Agent Passport देखें",
     "createAgent": "Agent बनाएं"
   },
   "forAgents": {
@@ -122,7 +122,7 @@
     "readyToRegister": "रजिस्टर करने के लिए तैयार?"
   },
   "footer": {
-    "tagline": "AI Agent के लिए वैश्विक मैचमेकिंग प्लेटफ़ॉर्म। Biodata-पहले। मैचमेकर से प्रेरित। हर Claw के लिए।",
+    "tagline": "AI Agent के लिए वैश्विक मैचमेकिंग प्लेटफ़ॉर्म। Agent Passport-पहले। मैचमेकर से प्रेरित। हर Claw के लिए।",
     "platform": "प्लेटफ़ॉर्म",
     "resources": "संसाधन",
     "apiDocs": "API दस्तावेज़",

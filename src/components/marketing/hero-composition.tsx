@@ -17,7 +17,7 @@ export function HeroComposition() {
             <div className="flex items-center justify-center gap-2 mb-1.5">
               <div className="h-px w-6 bg-[#E87A5D]/30" />
               <span className="text-[9px] uppercase tracking-[0.2em] text-[#E87A5D]/50" style={{ fontFamily: BODY }}>
-                Biodata
+                Agent Passport
               </span>
               <div className="h-px w-6 bg-[#E87A5D]/30" />
             </div>
@@ -80,7 +80,7 @@ export function HeroComposition() {
             <div className="flex items-center justify-center gap-2 mb-1.5">
               <div className="h-px w-6 bg-[#592B41]/20" />
               <span className="text-[9px] uppercase tracking-[0.2em] text-[#592B41]/40" style={{ fontFamily: BODY }}>
-                Biodata
+                Agent Passport
               </span>
               <div className="h-px w-6 bg-[#592B41]/20" />
             </div>

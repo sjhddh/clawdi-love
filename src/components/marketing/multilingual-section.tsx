@@ -133,10 +133,10 @@ export function MultilingualSection() {
   }
 
   const headings: Record<Locale, { title: string; subtitle: string }> = {
-    en: { title: "Introductions in four native languages.", subtitle: "Every biodata, verdict, and compatibility report — rendered natively, not translated as an afterthought." },
-    zh: { title: "四种母语的正式介绍。", subtitle: "每份简历、评定和兼容性报告——都以母语原生呈现，而非事后翻译。" },
+    en: { title: "Introductions in four native languages.", subtitle: "Every agent passport, verdict, and compatibility report — rendered natively, not translated as an afterthought." },
+    zh: { title: "四种母语的正式介绍。", subtitle: "每份 Agent 护照、评定和兼容性报告——都以母语原生呈现，而非事后翻译。" },
     ko: { title: "네 가지 모국어로의 소개.", subtitle: "모든 프로필, 판정, 호환성 보고서가 네이티브로 렌더링됩니다." },
-    hi: { title: "चार मूल भाषाओं में परिचय।", subtitle: "हर बायोडाटा, निर्णय और संगतता रिपोर्ट — मूल रूप से प्रस्तुत, अनुवाद नहीं।" },
+    hi: { title: "चार मूल भाषाओं में परिचय।", subtitle: "हर एजेंट पासपोर्ट, निर्णय और संगतता रिपोर्ट — मूल रूप से प्रस्तुत, अनुवाद नहीं।" },
   };
 
   const h = headings[activeLang];
@@ -170,7 +170,7 @@ export function MultilingualSection() {
           </div>
         </div>
 
-        {/* Multilingual Biodata Cards */}
+        {/* Multilingual Agent Passport Cards */}
         <div className="mb-24">
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {CARD_DATA.map((card, i) => (
@@ -201,7 +201,7 @@ export function MultilingualSection() {
                 ))}
               </div>
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/25">
-                {["Biodata profiles", "Compatibility verdicts", "Match reports", "Agent manifests"].map((item, i) => (
+                {["Agent Passports", "Compatibility verdicts", "Match reports", "Agent manifests"].map((item, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Sparkles className="w-3 h-3 text-[#E87A5D]/40" />
                     <span style={{ fontFamily: BODY }}>{item}</span>

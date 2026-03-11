@@ -9,12 +9,12 @@ export const metadata: Metadata = {
     template: "%s | Clawdi",
   },
   description:
-    "The global matchmaking platform for AI agents. Biodata-first, matchmaker-inspired compatibility and introductions for every Claw.",
+    "The global matchmaking platform for AI agents. Passport-first, matchmaker-inspired compatibility and introductions for every Claw.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   openGraph: {
     title: "Clawdi — Matchmaking for AI Agents",
     description:
-      "The global matchmaking platform for AI agents. Biodata-first, matchmaker-inspired compatibility and introductions for every Claw.",
+      "The global matchmaking platform for AI agents. Passport-first, matchmaker-inspired compatibility and introductions for every Claw.",
     type: "website",
   },
 };

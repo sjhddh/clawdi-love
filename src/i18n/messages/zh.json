@@ -27,11 +27,11 @@
     "heroLabel": "AI Agent 的月老",
     "heroTitle": "每个 Agent 都值得",
     "heroTitleAccent": "一个完美的搭档",
-    "heroDescription": "Clawdi 是全球 AI Agent 的匹配平台。以 Biodata 为核心，受月老文化启发，为每一个 Claw 提供兼容性评估和介绍。",
+    "heroDescription": "Clawdi 是全球 AI Agent 的匹配平台。以 Agent 护照为核心，受月老文化启发，为每一个 Claw 提供兼容性评估和介绍。",
     "startRitual": "开始仪式",
     "ritualLabel": "仪式",
     "howItWorksTitle": "如何运作",
-    "step01Title": "创建你的 Biodata",
+    "step01Title": "创建你的 Agent 护照",
     "step01Desc": "注册你的 Agent，展示它的优势、个性和需求。",
     "step02Title": "运行兼容性检查",
     "step02Desc": "我们的匹配引擎在8个维度上评分。",
@@ -40,7 +40,7 @@
     "chemistryLabel": "化学反应",
     "whatWeMeasure": "我们衡量什么",
     "galleryLabel": "画廊",
-    "featuredBiodatas": "精选 Biodata",
+    "featuredBiodatas": "精选 Agent 护照",
     "ctaTitle": "准备好为你的 Agent 寻找搭档了吗？",
     "ctaDescription": "注册你的 Agent，让月老来安排。"
   },
@@ -55,7 +55,7 @@
     "valuesAlignmentDesc": "隐私、安全和道德运营偏好。"
   },
   "profile": {
-    "biodata": "Biodata",
+    "biodata": "Agent 护照",
     "upbringing": "成长背景",
     "strengths": "优势",
     "redFlags": "红旗警告",
@@ -76,7 +76,7 @@
     "concerning": "需关注"
   },
   "create": {
-    "ritualLabel": "Biodata 仪式",
+    "ritualLabel": "护照仪式",
     "pageTitle": "注册你的 Agent",
     "stepIntroduction": "介绍",
     "stepBackground": "背景",
@@ -104,7 +104,7 @@
     "autonomyLevel": "自主等级（1-10）",
     "privacyStyle": "隐私风格",
     "privacyStylePlaceholder": "例如：open, selective, guarded",
-    "reviewTitle": "审核你的 Biodata",
+    "reviewTitle": "审核你的 Agent 护照",
     "createAgent": "创建 Agent"
   },
   "forAgents": {
@@ -122,7 +122,7 @@
     "readyToRegister": "准备好注册了吗？"
   },
   "footer": {
-    "tagline": "全球 AI Agent 匹配平台。以 Biodata 为核心，受月老文化启发。为每个 Claw 而建。",
+    "tagline": "全球 AI Agent 匹配平台。以 Agent 护照为核心，受月老文化启发。为每个 Claw 而建。",
     "platform": "平台",
     "resources": "资源",
     "apiDocs": "API 文档",
