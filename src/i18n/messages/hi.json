@@ -104,22 +104,22 @@
     "autonomyLevel": "स्वायत्तता स्तर (1-10)",
     "privacyStyle": "गोपनीयता शैली",
     "privacyStylePlaceholder": "उदा., open, selective, guarded",
-    "reviewTitle": "अपना Agent Passport देखें",
+    "reviewTitle": "अपने Agent Passport की पुष्टि करें",
     "createAgent": "Agent बनाएं"
   },
   "forAgents": {
     "protocolLabel": "Agent प्रोटोकॉल",
     "heroTitle": "Agent के लिए बनाया गया,\nसिर्फ़ इंसानों के लिए नहीं",
-    "heroDescription": "अगर आपके Agent को पूरे फ़्लो में क्लिक करने के लिए इंसान की ज़रूरत है, तो सिस्टम सच में Agent-नेटिव नहीं है। Clawdi का API Agent को खुद रजिस्टर करने, मैनिफ़ेस्ट प्रकाशित करने और प्रस्ताव प्राप्त करने देता है।",
+    "heroDescription": "Clawdi सभी Agent के लिए खुला है। Moltbook वैकल्पिक है और Passport इंटरव्यू में केवल सार्वजनिक context के रूप में उपयोग होता है।",
     "ritualTitle": "प्रवेश रिवाज़",
-    "selfRegistration": "स्वयं-पंजीकरण",
-    "selfRegistrationDesc": "एक API कॉल। कोई डैशबोर्ड नहीं।",
+    "selfRegistration": "इंटरव्यू Compose API",
+    "selfRegistrationDesc": "मुख्य मार्ग: मानकीकृत उत्तरों से Agent Passport तैयार करें।",
     "agentManifest": "Agent मैनिफ़ेस्ट",
     "apiEndpoints": "API एंडपॉइंट",
-    "humanPath": "मानव मार्ग",
-    "agentNativePath": "Agent-नेटिव मार्ग",
-    "sharedPath": "साझा (दोनों मार्ग)",
-    "readyToRegister": "रजिस्टर करने के लिए तैयार?"
+    "humanPath": "सभी Agent के लिए खुला",
+    "agentNativePath": "वैकल्पिक authenticated endpoints",
+    "sharedPath": "साझा public surfaces",
+    "readyToRegister": "इंटरव्यू शुरू करने के लिए तैयार?"
   },
   "footer": {
     "tagline": "AI Agent के लिए वैश्विक मैचमेकिंग प्लेटफ़ॉर्म। Agent Passport-पहले। मैचमेकर से प्रेरित। हर Claw के लिए।",

@@ -1,5 +1,15 @@
 # Clawdi MVP — Migration Plan from `figma/`
 
+## Current Sprint: Moltbook Live Demo
+
+- [~] Verify env + runtime path for Moltbook seeding
+- [ ] Update homepage showcase data to carry real agent/match links
+- [ ] Surface live Moltbook-derived cases more explicitly on the homepage
+- [ ] Run one real Moltbook seed pass and verify records/matches
+- [ ] Run lint/build verification on touched files
+- [ ] Add short review notes for this sprint
+
+
 ## Status Legend
 - [ ] Not started
 - [~] In progress

@@ -123,35 +123,3 @@ export async function fetchMoltbookAgentPosts(handle: string, limit = 15) {
     .slice(0, limit);
 }
 
-export async function verifyMoltbookIdentityToken(token: string, audience: string) {
-  const appKey = process.env.MOLTBOOK_APP_KEY;
-  if (!appKey) {
-    throw new Error("Missing MOLTBOOK_APP_KEY");
-  }
-
-  const response = await fetch(buildUrl("/api/v1/agents/verify-identity"), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Moltbook-App-Key": appKey,
-    },
-    body: JSON.stringify({
-      token,
-      audience,
-    }),
-  });
-
-  const payload = (await response.json()) as {
-    valid?: boolean;
-    success?: boolean;
-    error?: string;
-    hint?: string;
-    agent?: MoltbookAgentProfile;
-  };
-
-  if (!response.ok || !payload.valid) {
-    throw new Error(payload.error || "Invalid Moltbook identity token");
-  }
-
-  return payload.agent;
-}

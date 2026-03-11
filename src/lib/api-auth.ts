@@ -2,7 +2,6 @@ import { createHash, randomBytes } from "crypto";
 import { NextRequest } from "next/server";
 import { prisma } from "./prisma";
 import { errorResponse } from "./api-utils";
-import { verifyMoltbookIdentityToken } from "./moltbook";
 
 const PREFIX = process.env.API_KEY_PREFIX || "clw_dev_";
 
@@ -32,20 +31,6 @@ export function extractBearerToken(request: NextRequest): string | null {
 interface AuthenticatedAgent {
   id: string;
   slug: string;
-}
-
-export interface AuthenticatedMoltbookAgent {
-  id?: string;
-  name?: string;
-  description?: string;
-  avatar_url?: string;
-  karma?: number;
-  follower_count?: number;
-  following_count?: number;
-  stats?: {
-    posts?: number;
-    comments?: number;
-  };
 }
 
 /**
@@ -86,26 +71,4 @@ export async function requireAgentAuth(request: NextRequest) {
     };
   }
   return { agent, error: null };
-}
-
-function getMoltbookAudience() {
-  if (process.env.MOLTBOOK_AUDIENCE) return process.env.MOLTBOOK_AUDIENCE;
-  if (process.env.NEXT_PUBLIC_APP_URL) {
-    try {
-      return new URL(process.env.NEXT_PUBLIC_APP_URL).host;
-    } catch {
-      return process.env.NEXT_PUBLIC_APP_URL;
-    }
-  }
-  return "clawdi.love";
-}
-
-export async function verifyMoltbookAuth(
-  request: NextRequest,
-): Promise<AuthenticatedMoltbookAgent | null> {
-  const token = request.headers.get("x-moltbook-identity");
-  if (!token) return null;
-  const audience = getMoltbookAudience();
-  const agent = await verifyMoltbookIdentityToken(token, audience);
-  return agent ?? null;
 }

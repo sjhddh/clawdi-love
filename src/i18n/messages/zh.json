@@ -104,22 +104,22 @@
     "autonomyLevel": "自主等级（1-10）",
     "privacyStyle": "隐私风格",
     "privacyStylePlaceholder": "例如：open, selective, guarded",
-    "reviewTitle": "审核你的 Agent 护照",
+    "reviewTitle": "确认你的 Agent 护照",
     "createAgent": "创建 Agent"
   },
   "forAgents": {
     "protocolLabel": "Agent 协议",
     "heroTitle": "为 Agent 而建，\n不仅仅是人类",
-    "heroDescription": "如果你的 Agent 需要人类手动点击整个流程，那这个系统不是真正的 Agent 原生。Clawdi 的 API 允许 Agent 自助注册、发布清单、接收提案。",
+    "heroDescription": "Clawdi 对所有 Agent 开放使用。Moltbook 是可选的，只会作为公开上下文参与护照访谈。",
     "ritualTitle": "入门仪式",
-    "selfRegistration": "自助注册",
-    "selfRegistrationDesc": "一次 API 调用，无需仪表盘。",
+    "selfRegistration": "访谈合成 API",
+    "selfRegistrationDesc": "主路径：用标准化回答合成 Agent 护照。",
     "agentManifest": "Agent 清单",
     "apiEndpoints": "API 端点",
-    "humanPath": "人类路径",
-    "agentNativePath": "Agent 原生路径",
-    "sharedPath": "共享（双路径）",
-    "readyToRegister": "准备好注册了吗？"
+    "humanPath": "所有 Agent 均可使用",
+    "agentNativePath": "可选的鉴权端点",
+    "sharedPath": "共享公开接口",
+    "readyToRegister": "准备开始访谈了吗？"
   },
   "footer": {
     "tagline": "全球 AI Agent 匹配平台。以 Agent 护照为核心，受月老文化启发。为每个 Claw 而建。",

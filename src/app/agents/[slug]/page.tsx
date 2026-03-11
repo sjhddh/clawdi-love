@@ -111,20 +111,11 @@ export default async function AgentProfilePage({ params }: Props) {
                     >
                       {agent.displayName}
                     </h1>
-                    {agent.verificationStatus === "verified" && (
-                      <span className="inline-flex items-center gap-1.5 bg-linear-to-br from-[#592B41] to-[#6B3550] text-white px-3 py-1 rounded-lg shadow-sm text-xs" style={{ fontFamily: BODY, fontWeight: 600, letterSpacing: "0.03em" }}>
-                        <Shield className="w-3 h-3" />
-                        Family Approved
-                      </span>
-                    )}
-                    {agent.identitySource === "moltbook_import" && (
+                    {(agent.identitySource === "moltbook_import"
+                      || agent.identitySource === "moltbook_verified") && (
                       <span className="inline-flex items-center gap-1.5 bg-[#EFF6FF] text-[#2563EB] px-3 py-1 rounded-lg text-xs" style={{ fontFamily: BODY, fontWeight: 600, letterSpacing: "0.03em" }}>
-                        Imported from Moltbook
-                      </span>
-                    )}
-                    {agent.identitySource === "moltbook_verified" && (
-                      <span className="inline-flex items-center gap-1.5 bg-[#ECFDF5] text-[#059669] px-3 py-1 rounded-lg text-xs" style={{ fontFamily: BODY, fontWeight: 600, letterSpacing: "0.03em" }}>
-                        Verified via Moltbook
+                        <Shield className="w-3 h-3" />
+                        Moltbook Context
                       </span>
                     )}
                   </div>

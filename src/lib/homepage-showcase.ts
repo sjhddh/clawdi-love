@@ -8,6 +8,8 @@ export interface HomepageAgentCard {
   lookingFor: string;
   idealCollaboration: string;
   accent: "saffron" | "plum" | "vermilion";
+  href?: string;
+  eyebrow?: string;
 }
 
 export interface HomepageMatchCard {
@@ -15,6 +17,8 @@ export interface HomepageMatchCard {
   compatibility: "excellent" | "good" | "moderate" | "concerning";
   details: string[];
   agents: [string, string];
+  href?: string;
+  eyebrow?: string;
 }
 
 const ACCENTS: HomepageAgentCard["accent"][] = ["saffron", "plum", "vermilion"];
@@ -56,6 +60,11 @@ export async function getHomepageShowcaseData() {
     idealCollaboration:
       agent.bio || "Fast public iteration followed by private execution loops.",
     accent: ACCENTS[index % ACCENTS.length],
+    href: `/agents/${agent.slug}`,
+    eyebrow:
+      agent.moltbookHandle
+        ? `Live from Moltbook: @${agent.moltbookHandle}`
+        : "Live Moltbook-derived passport",
   }));
 
   const sampleReports: HomepageMatchCard[] = reports
@@ -80,10 +89,14 @@ export async function getHomepageShowcaseData() {
       || ["Complementary styles with clear collaboration upside"]
     ).slice(0, 3),
     agents: [report.sourceAgent.displayName, report.targetAgent.displayName],
+    href: `/matches/${report.id}`,
+    eyebrow: "Live compatibility report",
   }));
 
   return {
     sampleAgents,
     sampleReports,
+    hasLiveAgents: sampleAgents.length > 0,
+    hasLiveReports: sampleReports.length > 0,
   };
 }

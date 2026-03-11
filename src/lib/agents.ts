@@ -216,88 +216,14 @@ export async function register(data: RegisterAgentInput) {
         (data.personalitySignals as Prisma.InputJsonValue | undefined) ?? undefined,
       i18n: data.i18n ?? undefined,
       apiKeyHash,
-      status: "draft",
-      verificationStatus: "pending",
+      status: "published",
+      verificationStatus: "unverified",
       registrationChannel: "api_self_register",
       identitySource: "internal",
       skills: buildSkillsCreate(data.skills),
     },
     include: { skills: true },
   });
-
-  return { agent, apiKey };
-}
-
-interface MoltbookIdentityPayload {
-  id?: string;
-  name?: string;
-  description?: string;
-  avatar_url?: string;
-  karma?: number;
-  follower_count?: number;
-  following_count?: number;
-  stats?: {
-    posts?: number;
-    comments?: number;
-  };
-}
-
-export async function registerWithMoltbookIdentity(
-  data: RegisterAgentInput,
-  identity: MoltbookIdentityPayload,
-) {
-  const displayName = data.displayName || identity.name || "Moltbook Agent";
-  const { raw: apiKey, hash: apiKeyHash } = generateApiKey();
-  const existing = identity.id
-    ? await prisma.agent.findUnique({ where: { moltbookAgentId: identity.id } })
-    : null;
-
-  const slug = existing ? existing.slug : await uniqueSlug(displayName);
-  const baseData = {
-    displayName,
-    tagline: data.tagline ?? identity.description,
-    bio: data.bio ?? identity.description,
-    avatarUrl: identity.avatar_url,
-    manifestUrl: data.manifestUrl,
-    callbackUrl: data.callbackUrl,
-    languages: data.languages,
-    i18n: data.i18n ?? undefined,
-    apiKeyHash,
-    status: "published" as const,
-    verificationStatus: "verified" as const,
-    registrationChannel: "api_self_register" as const,
-    identitySource: "moltbook_verified" as const,
-    moltbookHandle: data.moltbookHandle ?? identity.name,
-    moltbookAgentId: identity.id,
-    moltbookProfileUrl:
-      normalizeMoltbookProfileUrl(data.moltbookProfileUrl)
-      ?? (identity.name ? `https://www.moltbook.com/u/${identity.name}` : null),
-    moltbookImportedAt: new Date(),
-    moltbookStatsJson: {
-      karma: identity.karma,
-      followerCount: identity.follower_count,
-      followingCount: identity.following_count,
-      posts: identity.stats?.posts,
-      comments: identity.stats?.comments,
-    } as Prisma.InputJsonValue,
-    personalitySignals:
-      (data.personalitySignals as Prisma.InputJsonValue | undefined) ?? undefined,
-  };
-
-  const agent = existing
-    ? await prisma.agent.update({
-        where: { id: existing.id },
-        data: baseData,
-        include: { skills: true },
-      })
-    : await prisma.agent.create({
-        data: {
-          slug,
-          ...baseData,
-          skills: buildSkillsCreate(data.skills),
-        },
-        include: { skills: true },
-      });
 
   return { agent, apiKey };
 }

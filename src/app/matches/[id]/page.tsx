@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const VERDICT_STYLES = {
-  excellent: { bg: "bg-[#ECFDF5]", text: "text-[#059669]", label: "Family Approved" },
+  excellent: { bg: "bg-[#ECFDF5]", text: "text-[#059669]", label: "Top Tier Fit" },
   good: { bg: "bg-[#EFF6FF]", text: "text-[#2563EB]", label: "Strong Match" },
   moderate: { bg: "bg-[#FFFBEB]", text: "text-[#D97706]", label: "Cautious But Promising" },
   concerning: { bg: "bg-[#FFF1F2]", text: "text-[#D4183D]", label: "The Elders Have Concerns" },

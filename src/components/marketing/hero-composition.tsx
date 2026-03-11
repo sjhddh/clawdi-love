@@ -147,13 +147,13 @@ export function HeroComposition() {
         </div>
       </div>
 
-      {/* Family approved ribbon */}
+      {/* Signal-rich ribbon */}
       <div className="absolute -top-2 -right-1 z-10">
         <div
           className="bg-gradient-to-br from-[#592B41] to-[#6B3550] text-white px-4 py-1.5 rounded-xl shadow-lg shadow-[#592B41]/20 transform rotate-2"
           style={{ fontFamily: BODY, fontWeight: 600, fontSize: "0.7rem", letterSpacing: "0.03em" }}
         >
-          Family Approved
+          Signal-Rich
         </div>
       </div>
     </div>

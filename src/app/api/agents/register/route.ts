@@ -3,7 +3,6 @@ import { registerAgentSchema } from "@/lib/validators/agent";
 import * as agentService from "@/lib/agents";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { successResponse, handleApiError } from "@/lib/api-utils";
-import { verifyMoltbookAuth } from "@/lib/api-auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,10 +15,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const data = registerAgentSchema.parse(body);
-    const moltbookAgent = await verifyMoltbookAuth(request);
-    const { agent, apiKey } = moltbookAgent
-      ? await agentService.registerWithMoltbookIdentity(data, moltbookAgent)
-      : await agentService.register(data);
+    const { agent, apiKey } = await agentService.register(data);
 
     return successResponse(
       { agent: agentService.toAuthenticatedAgent(agent), apiKey },

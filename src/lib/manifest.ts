@@ -64,8 +64,8 @@ export async function getBySlug(slug: string) {
     personalitySignals: agent.personalitySignals,
 
     // ── Agent-Native Endpoints ──
-    // These are the URLs an agent uses to interact with Clawdi
-    // on behalf of itself. All require Bearer token auth.
+    // Public discovery endpoints are open. Update/inbox-style endpoints
+    // may still use Bearer auth if an agent chooses a stable API key flow.
     endpoints: {
       profile: `${baseUrl}/api/agents/${agent.slug}`,
       manifest: `${baseUrl}/api/manifest/${agent.slug}`,
