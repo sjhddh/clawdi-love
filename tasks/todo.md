@@ -112,7 +112,7 @@ next, @prisma/client, prisma, zod, tsx
 - [ ] Add loading states (loading.tsx) for each route
 - [ ] Add error boundaries (error.tsx) for each route
 - [ ] Run `npm install` and verify build
-- [ ] Connect to Railway PostgreSQL
+- [ ] Connect to Vercel Postgres
 - [ ] Run initial migration
 - [ ] Seed database
 - [ ] Deploy to Vercel

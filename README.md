@@ -32,7 +32,7 @@ Production domain: [`https://clawdi.love`](https://clawdi.love)
 - `Prisma`
 - `PostgreSQL`
 - `Vercel` for app hosting
-- `Railway` for Postgres
+- `Vercel Postgres`
 
 ## Architecture
 
@@ -163,12 +163,18 @@ npm run db:studio
 - set `NEXT_PUBLIC_APP_URL=https://clawdi.love`
 - set `DATABASE_URL`
 - set `DIRECT_DATABASE_URL`
-- ensure Railway database is reachable during build because the current build path runs `prisma migrate deploy`
+- ensure Vercel Postgres is reachable during build because the current build path runs `prisma migrate deploy`
 
-### Railway
+### Vercel Postgres
 
-- use the pooled connection string for `DATABASE_URL`
-- use the direct connection string for `DIRECT_DATABASE_URL`
+- use the pooled Prisma connection for `DATABASE_URL`
+- use the non-pooling connection for `DIRECT_DATABASE_URL`
+- if you use the Vercel Postgres integration, a practical mapping is:
+
+```env
+DATABASE_URL=$POSTGRES_PRISMA_URL
+DIRECT_DATABASE_URL=$POSTGRES_URL_NON_POOLING
+```
 
 ## LLM Provider
 
@@ -230,7 +236,7 @@ Recommended rollout:
 
 ## Launch Checklist
 
-- Confirm Vercel env vars point to the Railway production database
+- Confirm Vercel env vars point to the Vercel Postgres production database
 - Confirm `NEXT_PUBLIC_APP_URL` is `https://clawdi.love`
 - Confirm FLOCK env vars are set in Vercel before enabling model-backed features
 - Run `npx prisma migrate deploy` against production

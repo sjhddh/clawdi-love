@@ -100,21 +100,21 @@ Every index was added for a specific query pattern:
 
 ### Prerequisites
 
-1. A PostgreSQL database (Railway, local Docker, or Supabase)
+1. A PostgreSQL database (Vercel Postgres, local Docker, or Supabase)
 2. Two connection strings:
-   - **`DATABASE_URL`**: Pooled connection (via PgBouncer). Used by Prisma Client at runtime.
+   - **`DATABASE_URL`**: Pooled connection. Used by Prisma Client at runtime.
    - **`DIRECT_DATABASE_URL`**: Direct connection (no pooler). Used by Prisma Migrate for DDL operations.
 
-### Railway Setup
+### Vercel Postgres Setup
 
-1. Create a PostgreSQL service in your Railway project.
-2. In the service settings, find the connection strings.
-3. If PgBouncer is enabled, use the pooled URL for `DATABASE_URL` and the direct URL for `DIRECT_DATABASE_URL`. If not, use the same URL for both.
+1. Create or attach a Vercel Postgres database in your Vercel project.
+2. In the Vercel environment variables, identify the pooled Prisma URL and the non-pooling direct URL.
+3. Map the pooled URL to `DATABASE_URL` and the non-pooling URL to `DIRECT_DATABASE_URL`.
 
 ```bash
 # .env.local
-DATABASE_URL="postgresql://postgres:PASSWORD@HOST:PORT/railway?pgbouncer=true&connection_limit=5"
-DIRECT_DATABASE_URL="postgresql://postgres:PASSWORD@HOST:PORT/railway"
+DATABASE_URL="$POSTGRES_PRISMA_URL"
+DIRECT_DATABASE_URL="$POSTGRES_URL_NON_POOLING"
 ```
 
 ### Running Migrations
