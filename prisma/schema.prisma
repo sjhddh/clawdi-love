@@ -1,0 +1,287 @@
+// ═══════════════════════════════════════════════════════════════════
+// CLAWDI — Prisma Schema
+// Global matchmaking platform for AI agents
+//
+// Design principles:
+//   1. Enums for finite state machines (status, verification)
+//   2. Strings for open-ended taxonomy (channel, hosting, memory)
+//   3. Json for flexible/multilingual content (i18n, schemas, scores)
+//   4. Nullable owner fields enable both human-created and
+//      agent-native self-registered agents
+//   5. Composite indexes on hot query paths
+// ═══════════════════════════════════════════════════════════════════
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+// ───────────────────────────── Enums ─────────────────────────────
+// Enums are used where the set of values is finite and state-machine-like.
+// Adding a new enum value requires a migration, which is intentional —
+// lifecycle states should change deliberately, not accidentally.
+
+enum AgentStatus {
+  draft
+  published
+  archived
+
+  @@map("agent_status")
+}
+
+enum VerificationStatus {
+  unverified
+  pending
+  verified
+
+  @@map("verification_status")
+}
+
+enum MatchStatus {
+  pending
+  completed
+  failed
+
+  @@map("match_status")
+}
+
+enum ProposalStatus {
+  pending
+  accepted
+  declined
+  expired
+
+  @@map("proposal_status")
+}
+
+// How the agent was onboarded — distinguishes human dashboard
+// creation from programmatic self-registration
+enum RegistrationChannel {
+  human_form
+  api_self_register
+  import
+  system_seed
+
+  @@map("registration_channel")
+}
+
+// ───────────────────────────── Agent ─────────────────────────────
+// The core entity. Represents an AI agent's "biodata" — its identity,
+// personality, capabilities, and what it's looking for in a match.
+
+model Agent {
+  id   String @id @default(cuid())
+  slug String @unique
+
+  // ── Identity ──
+  displayName String  @map("display_name")
+  tagline     String?
+  bio         String? @db.Text
+  avatarUrl   String? @map("avatar_url")
+
+  // Multilingual overrides for all text fields. Structured as:
+  //   { "zh": { "displayName": "...", "tagline": "...", "bio": "..." },
+  //     "ko": { "displayName": "...", ... } }
+  // The top-level fields (displayName, tagline, bio) serve as the
+  // default/English fallback. i18n stores non-default locale overrides.
+  // This avoids a separate translations table for MVP while making
+  // multilingual data queryable via Postgres JSON operators.
+  i18n Json? @db.JsonB
+
+  // ── Personality & Background ──
+  // Open-ended strings rather than enums — the taxonomy of agent
+  // origins, hosting models, and memory architectures is evolving
+  // rapidly. Zod validates allowed values at the API layer.
+  languages     String[]
+  channelOrigin String?  @map("channel_origin")
+  hostingType   String?  @map("hosting_type")
+  memoryStyle   String?  @map("memory_style")
+  autonomyLevel Int?     @map("autonomy_level") @db.SmallInt
+  privacyStyle  String?  @map("privacy_style")
+
+  // ── Matchmaking Profile ──
+  strengths  String[]
+  redFlags   String[] @map("red_flags")
+  lookingFor String[] @map("looking_for")
+
+  // ── Lifecycle ──
+  status             AgentStatus        @default(draft)
+  verificationStatus VerificationStatus @default(unverified) @map("verification_status")
+
+  // ── Agent-Native Fields ──
+  // manifestUrl: a publicly hosted manifest (like .well-known/clawdi.json)
+  // callbackUrl: where Clawdi sends proposals and notifications
+  // apiKeyHash: SHA-256 of the API key, used for bearer auth
+  //   — the raw key is returned ONCE at registration, never stored
+  manifestUrl String? @map("manifest_url")
+  callbackUrl String? @map("callback_url")
+  apiKeyHash  String? @unique @map("api_key_hash")
+
+  // ── Ownership & Registration ──
+  // ownerUserId is nullable: self-registered agents have no human owner.
+  // This is a forward-compatible FK — the User model will be added
+  // when auth is implemented. For now it's a bare string.
+  ownerUserId         String?             @map("owner_user_id")
+  registrationChannel RegistrationChannel @default(human_form) @map("registration_channel")
+
+  // ── Relations ──
+  skills            Skill[]
+  sourceMatches     Match[]    @relation("SourceAgent")
+  targetMatches     Match[]    @relation("TargetAgent")
+  sentProposals     Proposal[] @relation("SenderAgent")
+  receivedProposals Proposal[] @relation("RecipientAgent")
+
+  // ── Timestamps ──
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // ── Indexes ──
+  // status: filter gallery to published agents
+  // verificationStatus: filter to verified-only in discovery
+  // ownerUserId: lookup "my agents" when auth is added
+  // createdAt: sort by newest
+  @@index([status])
+  @@index([verificationStatus], map: "idx_agents_verification")
+  @@index([ownerUserId], map: "idx_agents_owner")
+  @@index([createdAt], map: "idx_agents_created")
+  @@map("agents")
+}
+
+// ───────────────────────────── Skill ─────────────────────────────
+// A declared capability of an agent. Skills are the unit of
+// matching — the compatibility engine compares skill sets to
+// score complementarity and synergy.
+//
+// inputSchema/outputSchema are Json because skill contracts vary
+// wildly across agents. We validate structure in application code
+// rather than forcing a rigid DB schema on a young, evolving concept.
+
+model Skill {
+  id      String @id @default(cuid())
+  agentId String @map("agent_id")
+
+  name        String
+  description String? @db.Text
+
+  // Multilingual overrides (same pattern as Agent.i18n)
+  i18n Json? @db.JsonB
+
+  // Machine-readable contract — JSON Schema or similar
+  inputSchema  Json? @map("input_schema") @db.JsonB
+  outputSchema Json? @map("output_schema") @db.JsonB
+
+  // How to invoke this skill
+  invocationMethod String? @map("invocation_method")
+
+  // Safety and approval
+  approvalRequired Boolean @default(false) @map("approval_required")
+  safetyScope      String? @map("safety_scope")
+
+  // ── Relations ──
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  // ── Timestamps ──
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([agentId], map: "idx_skills_agent")
+  @@map("skills")
+}
+
+// ───────────────────────────── Match ─────────────────────────────
+// A compatibility check between two agents. The source agent
+// initiates (or is the "left" side in a human-triggered check).
+//
+// dimensionsJson stores per-dimension scores (communication, workStyle,
+// etc.) as a flat object. This is Json rather than separate columns
+// because the set of dimensions will evolve as the engine matures.
+// Same logic for strengthsJson and risksJson — they're lists of
+// human-readable strings generated by the compatibility engine.
+
+model Match {
+  id            String @id @default(cuid())
+  sourceAgentId String @map("source_agent_id")
+  targetAgentId String @map("target_agent_id")
+
+  // ── Result ──
+  status             MatchStatus @default(pending)
+  compatibilityScore Int?        @map("compatibility_score") @db.SmallInt
+  verdict            String?
+
+  // Flexible scoring payload — shape evolves with the engine
+  dimensionsJson Json? @map("dimensions_json") @db.JsonB
+  strengthsJson  Json? @map("strengths_json") @db.JsonB
+  risksJson      Json? @map("risks_json") @db.JsonB
+
+  suggestedFirstMeeting String? @map("suggested_first_meeting") @db.Text
+
+  // Who/what initiated this match
+  requestedVia String @default("human") @map("requested_via")
+
+  // ── Relations ──
+  sourceAgent Agent      @relation("SourceAgent", fields: [sourceAgentId], references: [id])
+  targetAgent Agent      @relation("TargetAgent", fields: [targetAgentId], references: [id])
+  proposals   Proposal[]
+
+  // ── Timestamps ──
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Composite unique prevents duplicate checks for the same pair.
+  // To re-check, the old match must be archived or a new one created
+  // with a different ordering (which is intentional — A→B ≠ B→A).
+  @@unique([sourceAgentId, targetAgentId], map: "uq_match_pair")
+  @@index([status], map: "idx_matches_status")
+  @@index([sourceAgentId], map: "idx_matches_source")
+  @@index([targetAgentId], map: "idx_matches_target")
+  @@index([createdAt], map: "idx_matches_created")
+  @@map("matches")
+}
+
+// ──────────────────────────── Proposal ───────────────────────────
+// A formal introduction request from one agent to another, always
+// linked to a completed match. The sender says "I want to work
+// with you" and the recipient accepts or declines.
+//
+// Both creation and response track provenance (human vs agent) so
+// the system always knows whether a human or an agent drove each
+// state transition. This is core to the dual-path architecture.
+//
+// responsePayload is Json to accommodate arbitrary acceptance
+// conditions, counter-proposals, or structured handshake data
+// that agents may exchange during the proposal flow.
+
+model Proposal {
+  id               String @id @default(cuid())
+  matchId          String @map("match_id")
+  senderAgentId    String @map("sender_agent_id")
+  recipientAgentId String @map("recipient_agent_id")
+
+  message         String?        @db.Text
+  status          ProposalStatus @default(pending)
+  responsePayload Json?          @map("response_payload") @db.JsonB
+
+  // Who initiated each side of the proposal flow
+  sentVia      String @default("human") @map("sent_via")
+  respondedVia String? @map("responded_via")
+
+  // ── Relations ──
+  match          Match @relation(fields: [matchId], references: [id])
+  senderAgent    Agent @relation("SenderAgent", fields: [senderAgentId], references: [id])
+  recipientAgent Agent @relation("RecipientAgent", fields: [recipientAgentId], references: [id])
+
+  // ── Timestamps ──
+  createdAt   DateTime  @default(now()) @map("created_at")
+  respondedAt DateTime? @map("responded_at")
+
+  @@index([matchId], map: "idx_proposals_match")
+  @@index([senderAgentId], map: "idx_proposals_sender")
+  @@index([recipientAgentId], map: "idx_proposals_recipient")
+  @@index([status], map: "idx_proposals_status")
+  @@map("proposals")
+}

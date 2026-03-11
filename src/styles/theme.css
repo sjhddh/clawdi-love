@@ -1,0 +1,250 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ═══════════════════════════════════════════
+     CLAWDI DESIGN SYSTEM — Core Tokens
+     Premium · Ceremonial · Warm · Internet-Native
+  ═══════════════════════════════════════════ */
+
+  /* ── Brand Palette ── */
+  --clawdi-ivory:        #FDFBF7;
+  --clawdi-cream:        #FDF8F0;
+  --clawdi-parchment:    #F5F2EA;
+  --clawdi-ink:          #2C1820;
+  --clawdi-plum:         #592B41;
+  --clawdi-plum-deep:    #401F2F;
+  --clawdi-plum-dark:    #1E1118;
+  --clawdi-saffron:      #E87A5D;
+  --clawdi-saffron-warm: #D4683E;
+  --clawdi-vermilion:    #D97706;
+  --clawdi-gold:         #B45309;
+
+  /* ── Semantic Colors ── */
+  --clawdi-success:      #059669;
+  --clawdi-success-bg:   #ECFDF5;
+  --clawdi-warning:      #D97706;
+  --clawdi-warning-bg:   #FFFBEB;
+  --clawdi-danger:       #D4183D;
+  --clawdi-danger-bg:    #FFF1F2;
+  --clawdi-info:         #2563EB;
+  --clawdi-info-bg:      #EFF6FF;
+
+  /* ── Surface Colors ── */
+  --clawdi-surface-0:    #FDFBF7;
+  --clawdi-surface-1:    #FFFFFF;
+  --clawdi-surface-2:    #F5F2EA;
+  --clawdi-surface-dark: #1E1118;
+  --clawdi-surface-dark-elevated: #2A1620;
+
+  /* ── Border Colors ── */
+  --clawdi-border-subtle:   rgba(89, 43, 65, 0.06);
+  --clawdi-border-default:  rgba(89, 43, 65, 0.10);
+  --clawdi-border-emphasis: rgba(89, 43, 65, 0.20);
+  --clawdi-border-saffron:  rgba(232, 122, 93, 0.20);
+  --clawdi-border-dark:     rgba(255, 255, 255, 0.06);
+  --clawdi-border-dark-emphasis: rgba(255, 255, 255, 0.12);
+
+  /* ── Typography Scale ── */
+  --clawdi-font-display:    'Playfair Display', Georgia, serif;
+  --clawdi-font-body:       'Inter', system-ui, sans-serif;
+  --clawdi-font-mono:       'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --clawdi-font-zh:         'Noto Sans SC', sans-serif;
+  --clawdi-font-ko:         'Noto Sans KR', sans-serif;
+  --clawdi-font-hi:         'Noto Sans Devanagari', sans-serif;
+
+  /* Type sizes — named semantically */
+  --clawdi-text-hero:     clamp(2.75rem, 5vw, 4.5rem);
+  --clawdi-text-display:  clamp(2rem, 4vw, 3.5rem);
+  --clawdi-text-h1:       clamp(1.75rem, 3vw, 2.5rem);
+  --clawdi-text-h2:       clamp(1.5rem, 2.5vw, 2rem);
+  --clawdi-text-h3:       1.15rem;
+  --clawdi-text-body:     1rem;
+  --clawdi-text-small:    0.875rem;
+  --clawdi-text-caption:  0.75rem;
+  --clawdi-text-overline:  0.625rem;
+  --clawdi-text-micro:    0.5625rem;
+
+  /* ── Spacing Scale ── */
+  --clawdi-space-1:   0.25rem;
+  --clawdi-space-2:   0.5rem;
+  --clawdi-space-3:   0.75rem;
+  --clawdi-space-4:   1rem;
+  --clawdi-space-5:   1.25rem;
+  --clawdi-space-6:   1.5rem;
+  --clawdi-space-8:   2rem;
+  --clawdi-space-10:  2.5rem;
+  --clawdi-space-12:  3rem;
+  --clawdi-space-16:  4rem;
+  --clawdi-space-20:  5rem;
+  --clawdi-space-24:  6rem;
+  --clawdi-space-section: 7rem;
+
+  /* ── Border Radius ── */
+  --clawdi-radius-sm:     0.375rem;
+  --clawdi-radius-md:     0.625rem;
+  --clawdi-radius-lg:     0.875rem;
+  --clawdi-radius-xl:     1rem;
+  --clawdi-radius-2xl:    1.25rem;
+  --clawdi-radius-3xl:    1.5rem;
+  --clawdi-radius-full:   9999px;
+
+  /* ── Shadows ── */
+  --clawdi-shadow-sm:     0 1px 3px rgba(89, 43, 65, 0.04), 0 1px 2px rgba(89, 43, 65, 0.02);
+  --clawdi-shadow-md:     0 4px 12px rgba(89, 43, 65, 0.06), 0 2px 4px rgba(89, 43, 65, 0.03);
+  --clawdi-shadow-lg:     0 8px 24px rgba(89, 43, 65, 0.08), 0 4px 8px rgba(89, 43, 65, 0.04);
+  --clawdi-shadow-xl:     0 16px 48px rgba(89, 43, 65, 0.10), 0 8px 16px rgba(89, 43, 65, 0.05);
+  --clawdi-shadow-2xl:    0 24px 64px rgba(89, 43, 65, 0.14), 0 12px 24px rgba(89, 43, 65, 0.06);
+  --clawdi-shadow-saffron: 0 8px 24px rgba(232, 122, 93, 0.15);
+  --clawdi-shadow-plum:    0 8px 24px rgba(89, 43, 65, 0.20);
+
+  /* ── Transitions ── */
+  --clawdi-ease:          cubic-bezier(0.4, 0, 0.2, 1);
+  --clawdi-duration-fast: 150ms;
+  --clawdi-duration:      250ms;
+  --clawdi-duration-slow: 400ms;
+  --clawdi-duration-ceremony: 800ms;
+
+  /* ── Ornamental ── */
+  --clawdi-gradient-saffron: linear-gradient(135deg, #E87A5D, #D4683E);
+  --clawdi-gradient-plum:    linear-gradient(135deg, #592B41, #6B3550);
+  --clawdi-gradient-warm:    linear-gradient(to right, #E87A5D, #D97706);
+  --clawdi-gradient-header:  linear-gradient(to right, #592B41, #E87A5D, #592B41);
+  --clawdi-gradient-page:    linear-gradient(to bottom, #FDFBF7, #FDF8F0, #F5F2EA);
+
+  /* ═══ Map to shadcn/ui vars ═══ */
+  --font-size: 16px;
+  --background: var(--clawdi-ivory);
+  --foreground: var(--clawdi-ink);
+  --card: var(--clawdi-surface-1);
+  --card-foreground: var(--clawdi-ink);
+  --popover: var(--clawdi-surface-1);
+  --popover-foreground: var(--clawdi-ink);
+  --primary: var(--clawdi-plum);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--clawdi-parchment);
+  --secondary-foreground: var(--clawdi-ink);
+  --muted: var(--clawdi-parchment);
+  --muted-foreground: rgba(44, 24, 32, 0.5);
+  --accent: var(--clawdi-saffron);
+  --accent-foreground: #FFFFFF;
+  --destructive: var(--clawdi-danger);
+  --destructive-foreground: #FFFFFF;
+  --border: var(--clawdi-border-default);
+  --input: transparent;
+  --input-background: rgba(89, 43, 65, 0.03);
+  --switch-background: rgba(89, 43, 65, 0.15);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: rgba(232, 122, 93, 0.40);
+  --chart-1: var(--clawdi-saffron);
+  --chart-2: var(--clawdi-plum);
+  --chart-3: var(--clawdi-success);
+  --chart-4: var(--clawdi-vermilion);
+  --chart-5: var(--clawdi-info);
+  --radius: 0.625rem;
+  --sidebar: var(--clawdi-ivory);
+  --sidebar-foreground: var(--clawdi-ink);
+  --sidebar-primary: var(--clawdi-plum);
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: var(--clawdi-parchment);
+  --sidebar-accent-foreground: var(--clawdi-ink);
+  --sidebar-border: var(--clawdi-border-subtle);
+  --sidebar-ring: rgba(232, 122, 93, 0.40);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    font-size: var(--font-size);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+}
