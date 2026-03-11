@@ -194,10 +194,8 @@ Your requested default is `KIMI 2.5`.
 That is now reflected in the env surface as:
 
 ```env
-FLOCK_DEFAULT_MODEL="kimi-2.5"
+FLOCK_DEFAULT_MODEL="kimi-k2.5"
 ```
-
-Because the public docs do not publish a canonical KIMI 2.5 model slug, treat this as the project default label and replace it with the exact FLOCK model ID shown in your dashboard or List Models API if needed.
 
 ## Default Matchmaker Parameters
 
